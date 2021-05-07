@@ -46,6 +46,45 @@ export const allBooksRemovedFromCart = (bookId) => {
   };
 };
 
+// cars
+const carModelsRequested = () => {
+  return {
+    type: 'FETCH_CAR_MODELS_REQUEST'
+  };
+};
+
+const carModelsLoaded = (newModels) => {
+  return {
+    type: 'FETCH_CAR_MODELS_SUCCESS',
+    payload: newModels
+  };
+};
+
+const carModelsError = (error) => {
+  return {
+    type: 'FETCH_CAR_MODELS_FAILURE',
+    payload: error
+  }
+};
+
+const fetchCarModels = (bookstoreService, dispatch) => () => {
+  dispatch(carModelsRequested());
+  bookstoreService.getCarBrands()
+    .then((data) => dispatch(carModelsLoaded(data)))
+    .catch((err) => dispatch(carModelsError(err)));
+};
+
+export const brandSelected = (brandOptions, selectedBrand) => {
+  return {
+    type: 'BRAND_SELECTED',
+    payload: {
+      brandOptions,
+      selectedBrand
+    }
+  };
+};
+
 export {
-  fetchBooks
+  fetchBooks,
+  fetchCarModels
 };

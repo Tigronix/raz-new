@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import ShopHeader from '../shop-header';
-import { HomePage, CartPage } from '../pages';
+import { HomePage, CartPage, AddProductPage } from '../pages';
 
 import './app.css';
 
@@ -19,6 +19,11 @@ const App = () => {
           path="/cart"
           component={CartPage}
           />
+
+          <Route
+            path="/add-product"
+            component={AddProductPage}
+            />
       </Switch>
     </main>
   );
