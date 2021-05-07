@@ -117,6 +117,12 @@ export default class BookstoreService {
     });
   }
 
+  getCarModels() {
+    return new Promise((resolve) => {
+      resolve(this.carModels);
+    });
+  }
+
   // async getResource(url) {
   //   const res = await fetch(`${this._apiBase}${url}`, {
   //     method: 'POST',

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Select from 'react-select'
 
 import { withBookstoreService } from '../hoc';
-import { fetchCarModels, brandSelected } from '../../actions';
+import { fetchCarBrands, brandSelected } from '../../actions';
 import { compose } from '../../utils';
 import Spinner from '../spinner/';
 import ErrorIndicator from '../error-indicator/';
@@ -15,17 +15,18 @@ const FormAddProduct = ({ brandOptions, onBrandSelected, selectedBrand }) => {
     <form>
       <h2>Добавление товара</h2>
       <h2>Selected Brand:
-        <div>
+        <span>
           {
             selectedBrand.map((brand) => {
               return (
-                <div key={brand.value}>
+                <span key={brand.value}>
+                  <span>{brand.value}</span>
                   <span>{brand.label}</span>
-                </div>
+                </span>
               )
             })
           }
-        </div>
+        </span>
       </h2>
       <div className="form-group">
         <h4>Марка</h4>
@@ -59,7 +60,7 @@ const FormAddProduct = ({ brandOptions, onBrandSelected, selectedBrand }) => {
 
 class FormAddProductContainer extends Component {
   componentDidMount() {
-    this.props.fetchCarModels();
+    this.props.fetchCarBrands();
   }
 
   render() {
@@ -83,7 +84,7 @@ const mapStateToProps = ({ car: { brandOptions, loading, error, selectedBrand } 
 
 const mapDispatchToProps = (dispatch, { bookstoreService }) => {
   return {
-    fetchCarModels: fetchCarModels(bookstoreService, dispatch),
+    fetchCarBrands: fetchCarBrands(bookstoreService, dispatch),
     onBrandSelected: (brandOptions, selectedBrand) => {
       console.log(brandOptions, selectedBrand);
       return dispatch(brandSelected(brandOptions, selectedBrand));

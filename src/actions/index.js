@@ -47,31 +47,31 @@ export const allBooksRemovedFromCart = (bookId) => {
 };
 
 // cars
-const carModelsRequested = () => {
+const carBrandsRequested = () => {
   return {
     type: 'FETCH_CAR_MODELS_REQUEST'
   };
 };
 
-const carModelsLoaded = (newModels) => {
+const carBrandsLoaded = (newModels) => {
   return {
     type: 'FETCH_CAR_MODELS_SUCCESS',
     payload: newModels
   };
 };
 
-const carModelsError = (error) => {
+const carBrandsError = (error) => {
   return {
     type: 'FETCH_CAR_MODELS_FAILURE',
     payload: error
   }
 };
 
-const fetchCarModels = (bookstoreService, dispatch) => () => {
-  dispatch(carModelsRequested());
+const fetchCarBrands = (bookstoreService, dispatch) => () => {
+  dispatch(carBrandsRequested());
   bookstoreService.getCarBrands()
-    .then((data) => dispatch(carModelsLoaded(data)))
-    .catch((err) => dispatch(carModelsError(err)));
+    .then((data) => dispatch(carBrandsLoaded(data)))
+    .catch((err) => dispatch(carBrandsError(err)));
 };
 
 export const brandSelected = (brandOptions, selectedBrand) => {
@@ -86,5 +86,5 @@ export const brandSelected = (brandOptions, selectedBrand) => {
 
 export {
   fetchBooks,
-  fetchCarModels
+  fetchCarBrands
 };
