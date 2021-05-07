@@ -22,7 +22,7 @@ const updateCar = (state, action) => {
   }
 
   switch (action.type) {
-    case 'FETCH_CAR_MODELS_REQUEST':
+    case 'FETCH_CAR_BRANDS_REQUEST':
       return {
         brandOptions: [],
         selectedBrand: [],
@@ -31,7 +31,7 @@ const updateCar = (state, action) => {
         error: null
       };
 
-    case 'FETCH_CAR_MODELS_SUCCESS':
+    case 'FETCH_CAR_BRANDS_SUCCESS':
       return {
         brandOptions: action.payload,
         selectedBrand: [],
@@ -40,7 +40,7 @@ const updateCar = (state, action) => {
         error: null
       };
 
-    case 'FETCH_CAR_MODELS_FAILURE':
+    case 'FETCH_CAR_BRANDS_FAILURE':
       return {
         brandOptions: [],
         selectedBrand: [],

@@ -49,20 +49,20 @@ export const allBooksRemovedFromCart = (bookId) => {
 // cars
 const carBrandsRequested = () => {
   return {
-    type: 'FETCH_CAR_MODELS_REQUEST'
+    type: 'FETCH_CAR_BRANDS_REQUEST'
   };
 };
 
 const carBrandsLoaded = (newModels) => {
   return {
-    type: 'FETCH_CAR_MODELS_SUCCESS',
+    type: 'FETCH_CAR_BRANDS_SUCCESS',
     payload: newModels
   };
 };
 
 const carBrandsError = (error) => {
   return {
-    type: 'FETCH_CAR_MODELS_FAILURE',
+    type: 'FETCH_CAR_BRANDS_FAILURE',
     payload: error
   }
 };
