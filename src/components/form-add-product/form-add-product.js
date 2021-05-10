@@ -7,6 +7,7 @@ import { fetchCarBrands, brandSelected, fetchCarModels } from '../../actions';
 import { compose } from '../../utils';
 import Spinner from '../spinner/';
 import ErrorIndicator from '../error-indicator/';
+import Files from 'react-files';
 
 import './form-add-product.css';
 
@@ -33,7 +34,7 @@ const FormAddProduct = ({ brandOptions, models, onBrandSelected, selectedBrand, 
         <h4>Марка</h4>
         <Select
           options={brandOptions}
-          onChange={(selectedBrand) => onBrandSelected(brandOptions,selectedBrand, models, selectedModels)}
+          onChange={(selectedBrand) => onBrandSelected(brandOptions, selectedBrand, models, selectedModels)}
           closeMenuOnSelect={false}
           isMulti
           isSearchable
@@ -58,7 +59,18 @@ const FormAddProduct = ({ brandOptions, models, onBrandSelected, selectedBrand, 
       </div>
       <div className="form-group">
         <h4>Загрузка картинок</h4>
-        <input className="form-control-file" type="file" placeholder="Загрузка картинок" />
+        <Files
+          className='files-dropzone'
+          // onChange={this.onFilesChange}
+          // onError={this.onFilesError}
+          accepts={['image/png', '.pdf', 'audio/*']}
+          multiple
+          maxFileSize={10000000}
+          minFileSize={0}
+          clickable
+        >
+          Drop files here or click to upload
+        </Files>
       </div>
       <button className="btn btn-primary">Добавить товар</button>
     </form>
@@ -82,12 +94,12 @@ class FormAddProductContainer extends Component {
       return <ErrorIndicator></ErrorIndicator>
     }
 
-    return <FormAddProduct 
-    selectedBrand={selectedBrand} 
-    brandOptions={brandOptions} 
-    onBrandSelected={onBrandSelected} 
-    models={models}
-    selectedModels={selectedModels}
+    return <FormAddProduct
+      selectedBrand={selectedBrand}
+      brandOptions={brandOptions}
+      onBrandSelected={onBrandSelected}
+      models={models}
+      selectedModels={selectedModels}
     ></FormAddProduct>
   }
 }
