@@ -3,14 +3,15 @@ import { connect } from 'react-redux';
 import Select from 'react-select'
 
 import { withBookstoreService } from '../hoc';
-import { fetchCarBrands, brandSelected } from '../../actions';
+import { fetchCarBrands, brandSelected, fetchCarModels } from '../../actions';
 import { compose } from '../../utils';
 import Spinner from '../spinner/';
 import ErrorIndicator from '../error-indicator/';
 
 import './form-add-product.css';
 
-const FormAddProduct = ({ brandOptions, onBrandSelected, selectedBrand }) => {
+const FormAddProduct = ({ brandOptions, models, onBrandSelected, selectedBrand, selectedModels }) => {
+  console.log(selectedModels);
   return (
     <form>
       <h2>Добавление товара</h2>
@@ -32,7 +33,7 @@ const FormAddProduct = ({ brandOptions, onBrandSelected, selectedBrand }) => {
         <h4>Марка</h4>
         <Select
           options={brandOptions}
-          onChange={(selectedBrand) => onBrandSelected(brandOptions,selectedBrand)}
+          onChange={(selectedBrand) => onBrandSelected(brandOptions,selectedBrand, models, selectedModels)}
           closeMenuOnSelect={false}
           isMulti
           isSearchable
@@ -40,6 +41,12 @@ const FormAddProduct = ({ brandOptions, onBrandSelected, selectedBrand }) => {
       </div>
       <div className="form-group">
         <h4>Модель</h4>
+        <Select
+          options={selectedModels}
+          closeMenuOnSelect={false}
+          isMulti
+          isSearchable
+        />
       </div>
       <div className="form-group">
         <h4>Цена</h4>
@@ -61,10 +68,11 @@ const FormAddProduct = ({ brandOptions, onBrandSelected, selectedBrand }) => {
 class FormAddProductContainer extends Component {
   componentDidMount() {
     this.props.fetchCarBrands();
+    this.props.fetchCarModels();
   }
 
   render() {
-    const { brandOptions, loading, error, selectedBrand, onBrandSelected } = this.props;
+    const { brandOptions, loading, error, selectedBrand, onBrandSelected, models, selectedModels } = this.props;
 
     if (loading) {
       return <Spinner></Spinner>;
@@ -74,20 +82,29 @@ class FormAddProductContainer extends Component {
       return <ErrorIndicator></ErrorIndicator>
     }
 
-    return <FormAddProduct selectedBrand={selectedBrand} brandOptions={brandOptions} onBrandSelected={onBrandSelected}></FormAddProduct>
+    return <FormAddProduct 
+    selectedBrand={selectedBrand} 
+    brandOptions={brandOptions} 
+    onBrandSelected={onBrandSelected} 
+    models={models}
+    selectedModels={selectedModels}
+    ></FormAddProduct>
   }
 }
 
-const mapStateToProps = ({ car: { brandOptions, loading, error, selectedBrand } }) => {
-  return { brandOptions, loading, error, selectedBrand };
+const mapStateToProps = ({ car: { brandOptions, loading, error, selectedBrand, models, selectedModels } }) => {
+  return { brandOptions, loading, error, selectedBrand, models, selectedModels };
 };
 
 const mapDispatchToProps = (dispatch, { bookstoreService }) => {
   return {
     fetchCarBrands: fetchCarBrands(bookstoreService, dispatch),
-    onBrandSelected: (brandOptions, selectedBrand) => {
-      console.log(brandOptions, selectedBrand);
-      return dispatch(brandSelected(brandOptions, selectedBrand));
+    fetchCarModels: fetchCarModels(bookstoreService, dispatch),
+    onBrandSelected: (brandOptions, selectedBrand, models, selectedModels) => {
+      // console.log('Бренды:',brandOptions);
+      // console.log('Выбранные бренды', selectedBrand);
+      // console.log('onBrandSelected', models);
+      return dispatch(brandSelected(brandOptions, selectedBrand, models, selectedModels));
     }
   };
 };

@@ -19,62 +19,62 @@ export default class BookstoreService {
 
   carModels = [
     {
-      id: 1,
+      value: 1,
       brandId: '1',
       label: 'A4'
     },
     {
-      id: 2,
+      value: 2,
       brandId: '1',
       label: 'A5'
     },
     {
-      id: 3,
+      value: 3,
       brandId: '1',
       label: 'A6'
     },
     {
-      id: 4,
+      value: 4,
       brandId: '1',
       label: 'A8'
     },
     {
-      id: 5,
+      value: 5,
       brandId: '1',
       label: 'Q7'
     },
     {
-      id: 6,
+      value: 6,
       brandId: '2',
       label: '3-Series'
     },
     {
-      id: 7,
+      value: 7,
       brandId: '2',
       label: '5-Series'
     },
     {
-      id: 8,
+      value: 8,
       brandId: '2',
       label: '7-Series'
     },
     {
-      id: 9,
+      value: 9,
       brandId: '2',
       label: 'X5'
     },
     {
-      id: 10,
+      value: 10,
       brandId: '3',
       label: 'C30'
     },
     {
-      id: 10,
+      value: 11,
       brandId: '3',
       label: 'C70'
     },
     {
-      id: 10,
+      value: 12,
       brandId: '3',
       label: 'S40'
     }
