@@ -9,6 +9,10 @@ import {
   bookRemovedFromCart,
   allBooksRemovedFromCart
 } from './book';
+import {
+  getFiles,
+  fetchFiles
+} from './file';
 
 export {
   fetchBooks,
@@ -17,5 +21,7 @@ export {
   allBooksRemovedFromCart,
   fetchCarBrands,
   fetchCarModels,
-  brandSelected
+  brandSelected,
+  getFiles,
+  fetchFiles
 };

@@ -1,20 +1,37 @@
-import React, { Component } from 'react';
+import React, { Component, useMemo } from 'react';
 import { connect } from 'react-redux';
-import Select from 'react-select'
+import Select from 'react-select';
+import Dropzone from 'react-dropzone';
 
 import { withBookstoreService } from '../hoc';
-import { fetchCarBrands, brandSelected, fetchCarModels } from '../../actions';
+import {
+  fetchCarBrands,
+  brandSelected,
+  fetchCarModels,
+  getFiles,
+  fetchFiles
+} from '../../actions';
 import { compose } from '../../utils';
 import Spinner from '../spinner/';
 import ErrorIndicator from '../error-indicator/';
-import Files from 'react-files';
 
 import './form-add-product.css';
 
-const FormAddProduct = ({ brandOptions, models, onBrandSelected, selectedBrand, selectedModels }) => {
-  console.log(selectedModels);
+const FormAddProduct = ({
+  brandOptions,
+  models,
+  onBrandSelected,
+  selectedBrand,
+  selectedModels,
+  onFilesChange,
+  files
+}) => {
+  // console.log(files);
+
+  const maxSize = 5242880;
+
   return (
-    <form>
+    <form className="form-add-product">
       <h2>Добавление товара</h2>
       <h2>Selected Brand:
         <span>
@@ -35,6 +52,7 @@ const FormAddProduct = ({ brandOptions, models, onBrandSelected, selectedBrand, 
         <Select
           options={brandOptions}
           onChange={(selectedBrand) => onBrandSelected(brandOptions, selectedBrand, models, selectedModels)}
+          name="brands"
           closeMenuOnSelect={false}
           isMulti
           isSearchable
@@ -45,32 +63,75 @@ const FormAddProduct = ({ brandOptions, models, onBrandSelected, selectedBrand, 
         <Select
           options={selectedModels}
           closeMenuOnSelect={false}
+          name="models"
           isMulti
           isSearchable
         />
       </div>
       <div className="form-group">
         <h4>Цена</h4>
-        <input className="form-control" type="text" placeholder="Цена" />
+        <input name="price" className="form-control" type="text" placeholder="Цена" />
       </div>
       <div className="form-group">
         <h4>ОЕМ</h4>
-        <input className="form-control" type="text" placeholder="ОЕМ" />
+        <input name="oem" className="form-control" type="text" placeholder="ОЕМ" />
       </div>
       <div className="form-group">
         <h4>Загрузка картинок</h4>
-        <Files
-          className='files-dropzone'
-          // onChange={this.onFilesChange}
-          // onError={this.onFilesError}
-          accepts={['image/png', '.pdf', 'audio/*']}
-          multiple
-          maxFileSize={10000000}
-          minFileSize={0}
-          clickable
-        >
-          Drop files here or click to upload
-        </Files>
+        <Dropzone 
+        onDrop={(acceptedFiles) => onFilesChange(acceptedFiles)}>
+          {({ getRootProps, getInputProps }) => (
+            <section>
+              <div {...getRootProps()}>
+                <input {...getInputProps()} />
+                <p>Drag 'n' drop some files here, or click to select files</p>
+              </div>
+            </section>
+          )}
+        </Dropzone>
+        <div className="text-center mt-5">
+          {/* <Dropzone
+            onDrop={(acceptedFiles) => {
+              console.log(acceptedFiles)
+            }}
+            accept="image/png"
+            minSize={0}
+            maxSize={maxSize}
+            multiple
+          >
+            {({
+              getRootProps,
+              getInputProps,
+              isDragActive,
+              isDragReject,
+
+            }) => {
+              return (
+                <div {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  {!isDragActive && 'Click here or drop a file to upload!'}
+                  {isDragActive && !isDragReject && "Drop it like it's hot!"}
+                  {isDragReject && "File type not accepted, sorry!"}
+                </div>
+              )
+            }
+            }
+          </Dropzone> */}
+        </div>
+        <h2>Files:
+        <span>
+            {
+              files.map((file) => {
+                return (
+                  <div key={file.path}>
+                    <div>{file.path}</div>
+                    <div>{file.size}</div>
+                  </div>
+                )
+              })
+            }
+          </span>
+        </h2>
       </div>
       <button className="btn btn-primary">Добавить товар</button>
     </form>
@@ -79,12 +140,23 @@ const FormAddProduct = ({ brandOptions, models, onBrandSelected, selectedBrand, 
 
 class FormAddProductContainer extends Component {
   componentDidMount() {
+    this.props.fetchFiles();
     this.props.fetchCarBrands();
     this.props.fetchCarModels();
   }
 
   render() {
-    const { brandOptions, loading, error, selectedBrand, onBrandSelected, models, selectedModels } = this.props;
+    const {
+      brandOptions,
+      loading,
+      error,
+      selectedBrand,
+      onBrandSelected,
+      models,
+      selectedModels,
+      onFilesChange,
+      files
+    } = this.props;
 
     if (loading) {
       return <Spinner></Spinner>;
@@ -100,23 +172,41 @@ class FormAddProductContainer extends Component {
       onBrandSelected={onBrandSelected}
       models={models}
       selectedModels={selectedModels}
+      onFilesChange={onFilesChange}
+      files={files}
     ></FormAddProduct>
   }
 }
 
-const mapStateToProps = ({ car: { brandOptions, loading, error, selectedBrand, models, selectedModels } }) => {
-  return { brandOptions, loading, error, selectedBrand, models, selectedModels };
+const mapStateToProps = (
+  {
+    car: { brandOptions, loading, error, selectedBrand, models, selectedModels },
+    files: { files }
+  }
+) => {
+  return {
+    brandOptions,
+    loading,
+    error,
+    selectedBrand,
+    models,
+    selectedModels,
+    files
+  };
 };
 
 const mapDispatchToProps = (dispatch, { bookstoreService }) => {
   return {
     fetchCarBrands: fetchCarBrands(bookstoreService, dispatch),
     fetchCarModels: fetchCarModels(bookstoreService, dispatch),
+    fetchFiles: fetchFiles(bookstoreService, dispatch),
     onBrandSelected: (brandOptions, selectedBrand, models, selectedModels) => {
-      // console.log('Бренды:',brandOptions);
-      // console.log('Выбранные бренды', selectedBrand);
-      // console.log('onBrandSelected', models);
       return dispatch(brandSelected(brandOptions, selectedBrand, models, selectedModels));
+    },
+    onFilesChange: (files) => {
+      const newFiles = bookstoreService.getFiles(files);
+      // console.log('onFilesChange', newFiles);
+      return dispatch(getFiles(files))
     }
   };
 };
