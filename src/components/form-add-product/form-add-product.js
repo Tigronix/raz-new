@@ -9,7 +9,8 @@ import {
   brandSelected,
   fetchCarModels,
   getFiles,
-  fetchFiles
+  fetchFiles,
+  updateFiles
 } from '../../actions';
 import { compose } from '../../utils';
 import Spinner from '../spinner/';
@@ -26,9 +27,9 @@ const FormAddProduct = ({
   onFilesChange,
   files
 }) => {
-  // console.log(files);
 
   const maxSize = 5242880;
+  console.log('COMPONENT', files);
 
   return (
     <form className="form-add-product">
@@ -78,8 +79,12 @@ const FormAddProduct = ({
       </div>
       <div className="form-group">
         <h4>Загрузка картинок</h4>
-        <Dropzone 
-        onDrop={(acceptedFiles) => onFilesChange(acceptedFiles)}>
+        <Dropzone
+          accept="image/png"
+          minSize={0}
+          maxSize={maxSize}
+          multiple
+          onDrop={(acceptedFiles) => onFilesChange(acceptedFiles)}>
           {({ getRootProps, getInputProps }) => (
             <section>
               <div {...getRootProps()}>
@@ -119,18 +124,22 @@ const FormAddProduct = ({
           </Dropzone> */}
         </div>
         <h2>Files:
-        <span>
+        <ul className="form-add-product__list">
             {
               files.map((file) => {
+                console.log('FOREACH', file.id);
+                const src = `https://test.tt/${file.src}`;
                 return (
-                  <div key={file.path}>
-                    <div>{file.path}</div>
-                    <div>{file.size}</div>
-                  </div>
+                  <li className="form-add-product__li" key={file.id}>
+                    <h4>{file.name}</h4>
+                    <div className="form-add-product__img-box">
+                      <img className="form-add-product__img" src={src} alt="" />
+                    </div>
+                  </li>
                 )
               })
             }
-          </span>
+          </ul>
         </h2>
       </div>
       <button className="btn btn-primary">Добавить товар</button>
@@ -165,6 +174,7 @@ class FormAddProductContainer extends Component {
     if (error) {
       return <ErrorIndicator></ErrorIndicator>
     }
+
 
     return <FormAddProduct
       selectedBrand={selectedBrand}
@@ -204,9 +214,7 @@ const mapDispatchToProps = (dispatch, { bookstoreService }) => {
       return dispatch(brandSelected(brandOptions, selectedBrand, models, selectedModels));
     },
     onFilesChange: (files) => {
-      const newFiles = bookstoreService.getFiles(files);
-      // console.log('onFilesChange', newFiles);
-      return dispatch(getFiles(files))
+      return dispatch(updateFiles(bookstoreService, dispatch, files));
     }
   };
 };

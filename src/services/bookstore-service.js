@@ -139,6 +139,21 @@ export default class BookstoreService {
     return await res.json();
   }
 
+  async fetchFiles() {
+
+    // const res = await fetch(`${this._apiBase}files.php`, {
+    //   method: 'POST',
+    //   header: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify('get')
+    // });
+
+    const res = [];
+
+    return await res;
+  }
+
   async getFiles(files) {
     var formData = new FormData();
 
@@ -153,84 +168,5 @@ export default class BookstoreService {
 
     return await res.json();
   }
-
-  // async getResource(url) {
-  //   const res = await fetch(`${this._apiBase}${url}`, {
-  //     method: 'POST',
-  //     header: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify()
-  //   });
-
-  //   if (!res.ok) {
-  //     throw new Error(`Could not fetch ${url}` +
-  //       `, received ${res.status}`)
-  //   }
-  //   return await res.json();
-  // }
-
-  // async getQuestions() {
-  //   const questions = await this.getResource(`index.php`);
-  //   return questions;
-  // }
-
-
-  // async addQuestions(question) {
-  //   const res = await fetch(`${this._apiBase}add-question.php`, {
-  //     method: 'POST',
-  //     header: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       question
-  //     })
-  //   });
-
-  //   return await res.json();
-  // }
-
-  // async deleteQuestion(questionId) {
-  //   const res = await fetch(`${this._apiBase}delete-question.php`, {
-  //     method: 'POST',
-  //     header: {
-  //       'Content-Type': 'application/json',
-  //       'Access-Control-Allow-Origin': 'http://localhost:3000/'
-  //     },
-  //     body: JSON.stringify({
-  //       questionId
-  //     })
-  //   });
-
-  //   return await res.json();
-  // }
-
-  // async editQuestion(question) {
-  //   const res = await fetch(`${this._apiBase}edit-question.php`, {
-  //     method: 'POST',
-  //     header: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       question
-  //     })
-  //   });
-
-  //   return await res.json();
-  // }
-
-  // async getFiles(files) {
-  //   const res = await fetch(`${this._apiBase}get-files.php`, {
-  //     method: 'POST',
-  //     header: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       files
-  //     })
-  //   });
-
-  //   return await res.json();
-  // }
 
 }

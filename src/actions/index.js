@@ -11,7 +11,8 @@ import {
 } from './book';
 import {
   getFiles,
-  fetchFiles
+  fetchFiles,
+  updateFiles
 } from './file';
 
 export {
@@ -23,5 +24,6 @@ export {
   fetchCarModels,
   brandSelected,
   getFiles,
-  fetchFiles
+  fetchFiles,
+  updateFiles
 };
