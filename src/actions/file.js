@@ -1,11 +1,4 @@
-
-
-function* values(data) {
-  for (let prop of Object.keys(data)) // own properties, you might use
-    // for (let prop in obj)
-    yield data[prop];
-}
-
+import { objToArr } from '../utils';
 
 
 // car models
@@ -43,7 +36,7 @@ const fetchFiles = (bookstoreService, dispatch) => () => {
       dispatch(filesLoaded(data))
     })
     .catch((err) => {
-      console.log('BOOKSTORE ERR', err);
+      dispatch(filesError(err))
     });
 };
 
@@ -51,23 +44,16 @@ const updateFiles = (bookstoreService, dispatch, files) => {
   dispatch(filesRequested());
   bookstoreService.getFiles(files)
     .then((data) => {
-      // console.log('success', data);
       let arr = data;
 
-      if (data.length != 0) {
-        const newArr = [];
-        arr = Array.from(values(data));
-
-        arr.forEach(element => {
-          newArr.push(element[0]);
-        });
-        arr = newArr;
+      if (data.length !== 0) {
+        arr = Array.from(objToArr(data));
       }
 
       dispatch(filesLoaded(arr))
     })
     .catch((err) => {
-      console.log('BOOKSTORE ERR', err);
+      dispatch(filesError(err))
     });
 
 

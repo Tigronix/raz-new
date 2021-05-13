@@ -1,4 +1,4 @@
-import React, { Component, useMemo } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import Dropzone from 'react-dropzone';
@@ -8,7 +8,6 @@ import {
   fetchCarBrands,
   brandSelected,
   fetchCarModels,
-  getFiles,
   fetchFiles,
   updateFiles
 } from '../../actions';
@@ -28,8 +27,7 @@ const FormAddProduct = ({
   files
 }) => {
 
-  const maxSize = 5242880;
-  console.log('COMPONENT', files);
+  const maxSize = 20242880;
 
   return (
     <form className="form-add-product">
@@ -96,9 +94,6 @@ const FormAddProduct = ({
         </Dropzone>
         <div className="text-center mt-5">
           {/* <Dropzone
-            onDrop={(acceptedFiles) => {
-              console.log(acceptedFiles)
-            }}
             accept="image/png"
             minSize={0}
             maxSize={maxSize}
@@ -127,15 +122,21 @@ const FormAddProduct = ({
         <ul className="form-add-product__list">
             {
               files.map((file) => {
-                console.log('FOREACH', file.id);
-                const src = `https://test.tt/${file.src}`;
+                if (file.id) {
+                  const { id, src } = file;
+
+                  return (
+                    <li className="form-add-product__li" key={id}>
+                      <h4>{file.name}</h4>
+                      <div className="form-add-product__img-box">
+                        <img className="form-add-product__img" src={src} alt="" />
+                      </div>
+                    </li>
+                  )
+                }
+
                 return (
-                  <li className="form-add-product__li" key={file.id}>
-                    <h4>{file.name}</h4>
-                    <div className="form-add-product__img-box">
-                      <img className="form-add-product__img" src={src} alt="" />
-                    </div>
-                  </li>
+                  ''
                 )
               })
             }

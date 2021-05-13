@@ -30,15 +30,6 @@ const getFiles = (state, action) => {
       };
 
     case 'FILES_SELECTED':
-      // console.log('FILES_SELECTED', action.payload);
-      // console.log('FILES_SELECTED *****STATE****', state);
-
-      // const newArr = [
-      //   ...cartItems.slice(0, idx),
-      //   item,
-      //   ...cartItems.slice(idx + 1)
-      // ]
-
       return {
         files: action.payload,
         loading: false,

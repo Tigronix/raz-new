@@ -7,7 +7,7 @@ const brandSelected = (state, action) => {
     models.forEach((model) => {
       const { brandId } = model;
 
-      if (brandId == value) {
+      if (brandId === value) {
         selectedModels.push(model);
       }
     })
