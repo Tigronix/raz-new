@@ -1,5 +1,6 @@
 .files-loader__list {
   margin: -1rem;
+  margin-top: 1rem;
   display: flex;
   flex-wrap: wrap;
 }

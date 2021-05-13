@@ -155,7 +155,6 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
 
               return (
                 <li className="files-loader__li" key={id}>
-                  <h4>{file.name}</h4>
                   <div className="files-loader__img-box">
                     <img className="files-loader__img" src={src} alt="" />
                   </div>

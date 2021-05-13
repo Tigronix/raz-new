@@ -1,4 +1,4 @@
-import withRazbiratorService from './with-bookstore-service';
+import withRazbiratorService from './with-razbirator-service';
 
 export {
   withRazbiratorService
