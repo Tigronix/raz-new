@@ -3,6 +3,7 @@ const getFiles = (state, action) => {
     return {
       files: [],
       loading: true,
+      filesLoading: false,
       error: null,
     }
   }
@@ -12,6 +13,7 @@ const getFiles = (state, action) => {
       return {
         files: [],
         loading: true,
+        filesLoading: false,
         error: null,
       };
 
@@ -19,6 +21,7 @@ const getFiles = (state, action) => {
       return {
         files: action.payload,
         loading: false,
+        filesLoading: false,
         error: null,
       };
 
@@ -26,6 +29,7 @@ const getFiles = (state, action) => {
       return {
         files: [],
         loading: false,
+        filesLoading: false,
         error: true,
       };
 
@@ -33,6 +37,7 @@ const getFiles = (state, action) => {
       return {
         files: action.payload,
         loading: false,
+        filesLoading: true,
         error: null,
       };
 

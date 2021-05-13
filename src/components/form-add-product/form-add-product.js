@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
-import Dropzone from 'react-dropzone';
+import FilesLoader from '../file-loader';
 
 import { withBookstoreService } from '../hoc';
 import {
@@ -24,13 +24,13 @@ const FormAddProduct = ({
   selectedBrand,
   selectedModels,
   onFilesChange,
-  files
+  files,
+  filesLoading
 }) => {
-
-  const maxSize = 20242880;
 
   return (
     <form className="form-add-product">
+      <h1>{filesLoading}</h1>
       <h2>Добавление товара</h2>
       <h2>Selected Brand:
         <span>
@@ -76,7 +76,7 @@ const FormAddProduct = ({
         <input name="oem" className="form-control" type="text" placeholder="ОЕМ" />
       </div>
       <div className="form-group">
-        <h4>Загрузка картинок</h4>
+        {/* <h4>Загрузка картинок</h4>
         <Dropzone
           accept="image/png"
           minSize={0}
@@ -93,7 +93,7 @@ const FormAddProduct = ({
           )}
         </Dropzone>
         <div className="text-center mt-5">
-          {/* <Dropzone
+          <Dropzone
             accept="image/png"
             minSize={0}
             maxSize={maxSize}
@@ -116,10 +116,10 @@ const FormAddProduct = ({
               )
             }
             }
-          </Dropzone> */}
+          </Dropzone>
         </div>
         <h2>Files:
-        <ul className="form-add-product__list">
+          <ul className="form-add-product__list">
             {
               files.map((file) => {
                 if (file.id) {
@@ -141,8 +141,9 @@ const FormAddProduct = ({
               })
             }
           </ul>
-        </h2>
+        </h2> */}
       </div>
+      <FilesLoader></FilesLoader>
       <button className="btn btn-primary">Добавить товар</button>
     </form>
   )
@@ -165,7 +166,8 @@ class FormAddProductContainer extends Component {
       models,
       selectedModels,
       onFilesChange,
-      files
+      files,
+      filesLoading
     } = this.props;
 
     if (loading) {
@@ -185,6 +187,7 @@ class FormAddProductContainer extends Component {
       selectedModels={selectedModels}
       onFilesChange={onFilesChange}
       files={files}
+      filesLoading={filesLoading}
     ></FormAddProduct>
   }
 }
@@ -192,7 +195,7 @@ class FormAddProductContainer extends Component {
 const mapStateToProps = (
   {
     car: { brandOptions, loading, error, selectedBrand, models, selectedModels },
-    files: { files }
+    files: { files}
   }
 ) => {
   return {
