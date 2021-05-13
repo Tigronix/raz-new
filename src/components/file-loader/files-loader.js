@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, useMemo } from 'react';
 import { connect } from 'react-redux';
-import Dropzone from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
 
-import { withBookstoreService } from '../hoc';
+import { withRazbiratorService } from '../hoc';
 import {
   fetchFiles,
   updateFiles
@@ -10,6 +10,7 @@ import {
 import { compose } from '../../utils';
 import Spinner from '../spinner/';
 import ErrorIndicator from '../error-indicator/';
+import './files-loader.css';
 
 const FilesLoader = ({
   onFilesChange,
@@ -19,57 +20,73 @@ const FilesLoader = ({
 }) => {
 
   const maxSize = 20242880;
+  const baseStyle = {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    borderWidth: 2,
+    borderRadius: 2,
+    borderColor: '#eeeeee',
+    borderStyle: 'dashed',
+    backgroundColor: '#fafafa',
+    color: '#bdbdbd',
+    outline: 'none',
+    transition: 'border .24s ease-in-out, background .24s ease-in-out'
+  };
+
+  const activeStyle = {
+    borderColor: '#2196f3'
+  };
+
+  const acceptStyle = {
+    borderColor: '#00e676'
+  };
+
+  const rejectStyle = {
+    borderColor: '#ff1744'
+  };
+
+  const disabledStyle = {
+    background: '#ccc'
+  };
+
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragAccept,
+    isDragReject
+  } = useDropzone({
+    accept: "image/png",
+    minSize: 0,
+    maxSize: maxSize,
+    multiple: true,
+    onDropAccepted: (acceptedFiles) => onFilesChange(acceptedFiles),
+    disabled: filesLoading
+  });
+
+  const style = useMemo(() => ({
+    ...baseStyle,
+    ...(isDragActive ? activeStyle : {}),
+    ...(isDragAccept ? acceptStyle : {}),
+    ...(isDragReject ? rejectStyle : {})
+  }), [
+    isDragActive,
+    isDragReject,
+    isDragAccept,
+  ]);
 
   return (
-    <div className="form-group">
+    <div className="files-loader">
 
       <h4>Загрузка картинок</h4>
-      <Dropzone
-        accept="image/png"
-        minSize={0}
-        maxSize={maxSize}
-        multiple
-        onDrop={(acceptedFiles) => onFilesChange(acceptedFiles)}>
-        {({ getRootProps, getInputProps }) => (
-          <section>
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              <p>Drag 'n' drop some files here, or click to select files</p>
-            </div>
-          </section>
-        )}
-      </Dropzone>
-      <h2>Files:
-          {renderFiles(files, filesLoading)}
-      </h2>
-
-
-      <div className="text-center mt-5">
-        {/* <Dropzone
-            accept="image/png"
-            minSize={0}
-            maxSize={maxSize}
-            multiple
-          >
-            {({
-              getRootProps,
-              getInputProps,
-              isDragActive,
-              isDragReject,
-
-            }) => {
-              return (
-                <div {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  {!isDragActive && 'Click here or drop a file to upload!'}
-                  {isDragActive && !isDragReject && "Drop it like it's hot!"}
-                  {isDragReject && "File type not accepted, sorry!"}
-                </div>
-              )
-            }
-            }
-          </Dropzone> */}
+      <div {...getRootProps({ style })}>
+        <input {...getInputProps()} />
+        <p>Перетащите файлы в эту область или просто нажмите</p>
       </div>
+      {renderFiles(files, filesLoading)}
     </div>
   )
 };
@@ -101,7 +118,6 @@ class FilesLoaderContainer extends Component {
       onFilesChange={onFilesChange}
       files={files}
       filesLoading={filesLoading}
-      filesLoading={filesLoading}
       renderFiles={renderFiles}
     ></FilesLoader>
   }
@@ -120,32 +136,34 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (dispatch, { bookstoreService }) => {
+const mapDispatchToProps = (dispatch, { razbiratorService }) => {
   return {
-    fetchFiles: fetchFiles(bookstoreService, dispatch),
+    fetchFiles: fetchFiles(razbiratorService, dispatch),
     onFilesChange: (files) => {
-      return dispatch(updateFiles(bookstoreService, dispatch, files));
+      return dispatch(updateFiles(razbiratorService, dispatch, files));
     },
     renderFiles: (files, filesLoading) => {
       if (filesLoading) {
         return <Spinner></Spinner>
       }
-      
+
       return (
-        <ul className="form-add-product__list">
+        <ul className="files-loader__list">
           {files.map((file) => {
             if (file.id) {
               const { id, src } = file;
 
               return (
-                <li className="form-add-product__li" key={id}>
+                <li className="files-loader__li" key={id}>
                   <h4>{file.name}</h4>
-                  <div className="form-add-product__img-box">
-                    <img className="form-add-product__img" src={src} alt="" />
+                  <div className="files-loader__img-box">
+                    <img className="files-loader__img" src={src} alt="" />
                   </div>
                 </li>
               )
             }
+
+            return '';
           })}
         </ul>
       )
@@ -154,6 +172,6 @@ const mapDispatchToProps = (dispatch, { bookstoreService }) => {
 };
 
 export default compose(
-  withBookstoreService(),
+  withRazbiratorService(),
   connect(mapStateToProps, mapDispatchToProps)
 )(FilesLoaderContainer);

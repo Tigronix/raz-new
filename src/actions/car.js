@@ -52,16 +52,16 @@ const brandSelected = (brandOptions, selectedBrand, models, selectedModels) => {
   };
 };
 
-const fetchCarBrands = (bookstoreService, dispatch) => () => {
+const fetchCarBrands = (razbiratorService, dispatch) => () => {
   dispatch(carBrandsRequested());
-  bookstoreService.getCarBrands()
+  razbiratorService.getCarBrands()
     .then((data) => dispatch(carBrandsLoaded(data)))
     .catch((err) => dispatch(carBrandsError(err)));
 };
 
-const fetchCarModels = (bookstoreService, dispatch) => () => {
+const fetchCarModels = (razbiratorService, dispatch) => () => {
   dispatch(carModelsRequested());
-  bookstoreService.getCarModels()
+  razbiratorService.getCarModels()
     .then((data) => {
       dispatch(carModelsLoaded(data))
     })

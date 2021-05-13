@@ -1,5 +1,5 @@
 
-export default class BookstoreService {
+export default class RazbiratorService {
   _apiBase = 'http://test.tt/';
 
   carBrands = [
@@ -80,37 +80,6 @@ export default class BookstoreService {
     }
   ];
 
-  data = [
-    {
-      id: 1,
-      title: 'Production-Ready Microservices',
-      author: 'Susan J. Fowler',
-      price: 32,
-      coverImage: 'https://images-na.ssl-images-amazon.com/images/I/41yJ75gpV-L._SX381_BO1,204,203,200_.jpg'
-    },
-    {
-      id: 2,
-      title: 'Release It!',
-      author: 'Michael T. Nygard',
-      price: 45,
-      coverImage: 'https://images-na.ssl-images-amazon.com/images/I/414CRjLjwgL._SX403_BO1,204,203,200_.jpg'
-    }
-  ];
-
-  getBooks() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (Math.random() > 0.75) {
-          reject(new Error('Something bad happened'));
-        } else {
-          resolve(this.data);
-        }
-
-
-      }, 700);
-    });
-  }
-
   getCarBrands() {
     return new Promise((resolve) => {
       resolve(this.carBrands);
@@ -140,15 +109,6 @@ export default class BookstoreService {
   }
 
   async fetchFiles() {
-
-    // const res = await fetch(`${this._apiBase}files.php`, {
-    //   method: 'POST',
-    //   header: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify('get')
-    // });
-
     const res = [];
 
     return await res;

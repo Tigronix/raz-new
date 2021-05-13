@@ -29,9 +29,9 @@ const getFiles = (files) => {
   };
 };
 
-const fetchFiles = (bookstoreService, dispatch) => () => {
+const fetchFiles = (razbiratorService, dispatch) => () => {
   dispatch(filesRequested());
-  bookstoreService.fetchFiles()
+  razbiratorService.fetchFiles()
     .then((data) => {
       dispatch(filesLoaded(data))
     })
@@ -40,9 +40,9 @@ const fetchFiles = (bookstoreService, dispatch) => () => {
     });
 };
 
-const updateFiles = (bookstoreService, dispatch, files) => {
+const updateFiles = (razbiratorService, dispatch, files) => {
   dispatch(filesRequested());
-  bookstoreService.getFiles(files)
+  razbiratorService.getFiles(files)
     .then((data) => {
       let arr = data;
 
