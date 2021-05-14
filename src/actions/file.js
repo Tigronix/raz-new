@@ -1,7 +1,7 @@
 import { objToArr } from '../utils';
 
 
-// car models
+// fetchFiles
 const filesRequested = () => {
   return {
     type: 'FETCH_FILES_REQUEST'
@@ -22,13 +22,6 @@ const filesError = (error) => {
   }
 };
 
-const getFiles = (files) => {
-  return {
-    type: 'FILES_SELECTED',
-    payload: files
-  };
-};
-
 const fetchFiles = (razbiratorService, dispatch) => () => {
   dispatch(filesRequested());
   razbiratorService.fetchFiles()
@@ -40,8 +33,36 @@ const fetchFiles = (razbiratorService, dispatch) => () => {
     });
 };
 
+// updateFiles
+const updateFilesRequested = () => {
+  return {
+    type: 'UPDATE_FILES_REQUEST'
+  };
+};
+
+const getFiles = (files) => {
+  return {
+    type: 'FILES_SELECTED',
+    payload: files
+  };
+};
+
+const updateFilesLoaded = (files) => {
+  return {
+    type: 'UPDATE_FILES_SUCCESS',
+    payload: files
+  };
+};
+
+const updateFilesError = (error) => {
+  return {
+    type: 'UPDATE_FILES_FAILURE',
+    payload: error
+  }
+};
+
 const updateFiles = (razbiratorService, dispatch, files) => {
-  dispatch(filesRequested());
+  dispatch(updateFilesRequested());
   razbiratorService.getFiles(files)
     .then((data) => {
       let arr = data;
@@ -50,10 +71,10 @@ const updateFiles = (razbiratorService, dispatch, files) => {
         arr = Array.from(objToArr(data));
       }
 
-      dispatch(filesLoaded(arr))
+      dispatch(updateFilesLoaded(arr))
     })
     .catch((err) => {
-      dispatch(filesError(err))
+      dispatch(updateFilesError(err))
     });
 
 

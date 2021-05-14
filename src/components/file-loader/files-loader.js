@@ -16,7 +16,8 @@ const FilesLoader = ({
   onFilesChange,
   files,
   renderFiles,
-  filesLoading
+  filesLoading,
+  realFiles
 }) => {
 
   const maxSize = 20242880;
@@ -86,7 +87,7 @@ const FilesLoader = ({
         <input {...getInputProps()} />
         <p>Перетащите файлы в эту область или просто нажмите</p>
       </div>
-      {renderFiles(files, filesLoading)}
+      {renderFiles(realFiles, filesLoading)}
     </div>
   )
 };
@@ -103,7 +104,8 @@ class FilesLoaderContainer extends Component {
       onFilesChange,
       files,
       filesLoading,
-      renderFiles
+      renderFiles,
+      realFiles
     } = this.props;
 
     if (loading) {
@@ -119,20 +121,28 @@ class FilesLoaderContainer extends Component {
       files={files}
       filesLoading={filesLoading}
       renderFiles={renderFiles}
+      realFiles={realFiles}
     ></FilesLoader>
   }
 }
 
 const mapStateToProps = (
   {
-    files: { files, loading, error, filesLoading }
+    files: {
+      files,
+      loading,
+      error,
+      filesLoading,
+      realFiles
+    }
   }
 ) => {
   return {
     loading,
     error,
     files,
-    filesLoading
+    filesLoading,
+    realFiles
   };
 };
 
@@ -142,19 +152,16 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
     onFilesChange: (files) => {
       return dispatch(updateFiles(razbiratorService, dispatch, files));
     },
-    renderFiles: (files, filesLoading) => {
-      if (filesLoading) {
-        return <Spinner></Spinner>
-      }
-
-      return (
-        <ul className="files-loader__list">
-          {files.map((file) => {
+    renderFiles: (realFiles, filesLoading) => {
+      const renderList = (realFiles) => {
+        return <ul className="files-loader__list">
+          {realFiles.map((file) => {
             if (file.id) {
               const { id, src } = file;
 
               return (
                 <li className="files-loader__li" key={id}>
+                  <h4>{id}</h4>
                   <div className="files-loader__img-box">
                     <img className="files-loader__img" src={src} alt="" />
                   </div>
@@ -165,7 +172,27 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
             return '';
           })}
         </ul>
-      )
+      };
+
+
+      if (!realFiles) {
+        if (filesLoading) {
+          return <Spinner></Spinner>
+        }
+        return ''
+      }
+
+      if (filesLoading) {
+        return (
+          <div>
+            <Spinner></Spinner>
+
+            {renderList(realFiles)}
+          </div>
+        )
+      }
+
+      return renderList(realFiles)
     }
   };
 };
