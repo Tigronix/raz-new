@@ -12,12 +12,15 @@ import Spinner from '../spinner/';
 import ErrorIndicator from '../error-indicator/';
 import './files-loader.css';
 
+import Dnd from '../dnd';
+
 const FilesLoader = ({
   onFilesChange,
   files,
   renderFiles,
   filesLoading,
-  realFiles
+  realFiles,
+  renderDrag
 }) => {
 
   const maxSize = 20242880;
@@ -87,7 +90,8 @@ const FilesLoader = ({
         <input {...getInputProps()} />
         <p>Перетащите файлы в эту область или просто нажмите</p>
       </div>
-      {renderFiles(realFiles, filesLoading)}
+      
+      {renderDrag(realFiles, filesLoading)}
     </div>
   )
 };
@@ -105,7 +109,8 @@ class FilesLoaderContainer extends Component {
       files,
       filesLoading,
       renderFiles,
-      realFiles
+      realFiles,
+      renderDrag
     } = this.props;
 
     if (loading) {
@@ -122,6 +127,7 @@ class FilesLoaderContainer extends Component {
       filesLoading={filesLoading}
       renderFiles={renderFiles}
       realFiles={realFiles}
+      renderDrag={renderDrag}
     ></FilesLoader>
   }
 }
@@ -197,6 +203,12 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
       }
 
       return renderList(realFiles)
+    },
+    renderDrag: (realFiles, filesLoading) => {
+      if(filesLoading){
+        return <Spinner></Spinner>
+      }
+     return <Dnd realFiles={realFiles}></Dnd>
     }
   };
 };
