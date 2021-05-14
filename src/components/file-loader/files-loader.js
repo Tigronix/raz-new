@@ -162,9 +162,13 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
               return (
                 <li className="files-loader__li" key={id}>
                   <h4>{id}</h4>
-                  <div className="files-loader__img-box">
+                  <div className="files-loader__img-box mb-3">
                     <img className="files-loader__img" src={src} alt="" />
                   </div>
+                  <button className="btn btn-primary ml-1" type="button">Rotate left</button>
+                  <button className="btn btn-primary ml-1" type="button">Rotate right</button>
+                  <button className="btn btn-primary ml-1" type="button">Crop</button>
+                  <button className="btn btn-danger ml-1" type="button">Delete</button>
                 </li>
               )
             }
