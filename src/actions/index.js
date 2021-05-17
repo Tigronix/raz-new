@@ -8,7 +8,8 @@ import {
   fetchFiles,
   updateFiles,
   fetchRealFiles,
-  reorderRealFiles
+  reorderRealFiles,
+  updateRejectedFiles
 } from './file';
 
 export {
@@ -19,5 +20,6 @@ export {
   fetchFiles,
   updateFiles,
   fetchRealFiles,
-  reorderRealFiles
+  reorderRealFiles,
+  updateRejectedFiles
 };

@@ -102,10 +102,20 @@ const reorderRealFiles = (items) => {
   };
 };
 
+// update rejected files
+const updateRejectedFiles = (rejectedFiles) => {
+  // console.log('updateRejectedFiles********************', rejectedFiles);
+  return {
+    type: 'UPDATE_REJECTED_FILES',
+    payload: rejectedFiles
+  }
+};
+
 export {
   getFiles,
   fetchFiles,
   updateFiles,
   fetchRealFiles,
-  reorderRealFiles
+  reorderRealFiles,
+  updateRejectedFiles
 };

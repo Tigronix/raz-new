@@ -12,6 +12,7 @@ const updateFilesSuccess = (state, action) => {
     loading: false,
     filesLoading: false,
     error: null,
+    rejectedFiles: state.files.rejectedFiles
   };
 };
 
@@ -60,6 +61,7 @@ const getFiles = (state, action) => {
         loading: true,
         filesLoading: false,
         error: null,
+        rejectedFiles: state.files.rejectedFiles
       };
 
     case 'FILES_SELECTED':
@@ -69,6 +71,7 @@ const getFiles = (state, action) => {
         loading: false,
         filesLoading: true,
         error: null,
+        rejectedFiles: state.files.rejectedFiles
       };
 
     case 'UPDATE_FILES_SUCCESS':
@@ -101,6 +104,19 @@ const getFiles = (state, action) => {
         filesLoading: false,
         error: false
       };
+      
+    // update rejected files
+    case 'UPDATE_REJECTED_FILES':
+      console.log(`UPDATE_REJECTED_FILES`, action.payload)
+      return {
+        files: state.files.files,
+        realFiles: state.files.realFiles,
+        loading: false,
+        filesLoading: false,
+        error: false,
+        rejectedFiles: action.payload
+      };
+    
 
     default:
       return state.files
