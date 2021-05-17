@@ -4,7 +4,7 @@ const updateFilesSuccess = (state, action) => {
       ...state.files.realFiles,
       ...action.payload
     ];
-  } 
+  }
 
   return {
     files: [],
@@ -81,6 +81,25 @@ const getFiles = (state, action) => {
         loading: false,
         filesLoading: false,
         error: true,
+      };
+
+    // fetch real files
+    case 'FETCH_REAL_FILES':
+      return {
+        files: state.files.files,
+        realFiles: state.files.realFiles,
+        loading: false,
+        filesLoading: false,
+        error: false
+      };
+
+    case 'REORDER_REAL_FILES':
+      return {
+        files: state.files.files,
+        realFiles: action.payload,
+        loading: false,
+        filesLoading: false,
+        error: false
       };
 
     default:

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import FilesLoader from '../file-loader';
+import Dndn from '../dndn';
 
 import { withRazbiratorService } from '../hoc';
 import {
@@ -62,9 +63,11 @@ const FormAddProduct = ({
           </div></div>
         <div className="col">
           <FilesLoader></FilesLoader>
+
         </div>
       </div>
       <button className="btn btn-primary">Добавить товар</button>
+      <Dndn></Dndn>
     </form>
   )
 };

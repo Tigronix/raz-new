@@ -40,13 +40,10 @@ export default class Dnd extends React.Component {
       realFiles = [];
     }
 
-    console.log('props', realFiles);
     this.state = {
       items: realFiles
     }
     this.onDragEnd = this.onDragEnd.bind(this);
-
-    console.log('STATE', this.state.items);
   };
 
   onDragEnd(result) {
@@ -80,7 +77,6 @@ export default class Dnd extends React.Component {
             >
               {this.state.items.map(
                 (item, index) => {
-                  console.log('ITEM', item);
                   const stringId = item.id.toString();
 
                   return <Draggable

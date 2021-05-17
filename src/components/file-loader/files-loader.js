@@ -90,7 +90,7 @@ const FilesLoader = ({
         <input {...getInputProps()} />
         <p>Перетащите файлы в эту область или просто нажмите</p>
       </div>
-      
+
       {renderDrag(realFiles, filesLoading)}
     </div>
   )
@@ -205,10 +205,10 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
       return renderList(realFiles)
     },
     renderDrag: (realFiles, filesLoading) => {
-      if(filesLoading){
+      if (filesLoading) {
         return <Spinner></Spinner>
       }
-     return <Dnd realFiles={realFiles}></Dnd>
+      return <Dnd realFiles={realFiles}></Dnd>
     }
   };
 };

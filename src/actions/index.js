@@ -6,7 +6,9 @@ import {
 import {
   getFiles,
   fetchFiles,
-  updateFiles
+  updateFiles,
+  fetchRealFiles,
+  reorderRealFiles
 } from './file';
 
 export {
@@ -15,5 +17,7 @@ export {
   brandSelected,
   getFiles,
   fetchFiles,
-  updateFiles
+  updateFiles,
+  fetchRealFiles,
+  reorderRealFiles
 };

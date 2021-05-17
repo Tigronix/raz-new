@@ -1,6 +1,5 @@
 import { objToArr } from '../utils';
 
-
 // fetchFiles
 const filesRequested = () => {
   return {
@@ -84,8 +83,29 @@ const updateFiles = (razbiratorService, dispatch, files) => {
   };
 };
 
+// fetchRealFiles
+const realFilesRequested = () => {
+  return {
+    type: 'FETCH_REAL_FILES'
+  };
+};
+
+const fetchRealFiles = (razbiratorService, dispatch) => () => {
+  dispatch(realFilesRequested());
+};
+
+// reorder real files
+const reorderRealFiles = (items) => {
+  return {
+    type: 'REORDER_REAL_FILES',
+    payload: items
+  };
+};
+
 export {
   getFiles,
   fetchFiles,
-  updateFiles
+  updateFiles,
+  fetchRealFiles,
+  reorderRealFiles
 };

@@ -114,6 +114,10 @@ export default class RazbiratorService {
     return await res;
   }
 
+  async fetchRealFiles() {
+    
+  }
+
   async getFiles(files) {
     var formData = new FormData();
 
