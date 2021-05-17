@@ -101,76 +101,91 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
 
       return dispatch(reorderRealFiles(items));
     },
-    renderDnd: (realFiles, onDragEnd) => {
-      const grid = 8;
+    renderDnd: (realFiles, onDragEnd, filesLoading) => {
+      const renderDrag = () => {
+        const grid = 8;
 
-      const getItemStyle = (draggableStyle, isDragging) => ({
-        // some basic styles to make the items look a bit nicer
-        userSelect: 'none',
-        padding: grid * 2,
-        margin: `0 0 ${grid}px 0`,
+        const getItemStyle = (draggableStyle, isDragging) => ({
+          // some basic styles to make the items look a bit nicer
+          userSelect: 'none',
+          padding: grid * 2,
+          margin: `0 0 ${grid}px 0`,
 
-        // change background colour if dragging
-        background: isDragging ? 'lightgreen' : 'grey',
+          // change background colour if dragging
+          background: isDragging ? 'lightgreen' : 'grey',
 
-        // styles we need to apply on draggables
-        ...draggableStyle
-      });
+          // styles we need to apply on draggables
+          ...draggableStyle
+        });
 
-      const getListStyle = (isDraggingOver) => ({
-        background: isDraggingOver ? 'lightblue' : 'lightgrey',
-        padding: grid,
-        width: 250
-      });
+        const getListStyle = (isDraggingOver) => ({
+          background: isDraggingOver ? 'lightblue' : 'lightgrey',
+          padding: grid,
+          width: 250
+        });
+
+        return <DragDropContext onDragEnd={(result) => onDragEnd(result, realFiles)}>
+          <Droppable droppableId="droppable">
+            {(provided, snapshot) => {
+              return <div
+                ref={provided.innerRef}
+                style={getListStyle(snapshot.isDraggingOver)}
+                {...provided.droppableProps}
+              >
+                {realFiles.map(
+                  (item, index) => {
+                    const stringId = item.id.toString();
+
+                    return <Draggable
+                      key={item.id}
+                      draggableId={stringId}
+                      index={index}
+                    >
+                      {(provided, snapshot) => (
+                        <div>
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.dragHandleProps}
+                            {...provided.draggableProps}
+
+                            style={getItemStyle(
+                              provided.draggableProps.style,
+                              snapshot.isDragging
+                            )}
+                          >
+                            <h2>{item.id}</h2>
+                            <img src={item.src} alt="" />
+                          </div>
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Draggable>
+                  }
+                )}
+                {provided.placeholder}
+              </div>
+            }}
+          </Droppable>
+        </DragDropContext>
+      };
 
 
-      if (!realFiles) {
-        return ''
+      if (filesLoading && !realFiles) {
+        return <Spinner></Spinner>
       }
 
-      return <DragDropContext onDragEnd={(result) => onDragEnd(result, realFiles)}>
-        <Droppable droppableId="droppable">
-          {(provided, snapshot) => {
-            return <div
-              ref={provided.innerRef}
-              style={getListStyle(snapshot.isDraggingOver)}
-              {...provided.droppableProps}
-            >
-              {realFiles.map(
-                (item, index) => {
-                  const stringId = item.id.toString();
+      if (!filesLoading && realFiles) {
+        return renderDrag()
+      }
 
-                  return <Draggable
-                    key={item.id}
-                    draggableId={stringId}
-                    index={index}
-                  >
-                    {(provided, snapshot) => (
-                      <div>
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.dragHandleProps}
-                          {...provided.draggableProps}
-
-                          style={getItemStyle(
-                            provided.draggableProps.style,
-                            snapshot.isDragging
-                          )}
-                        >
-                          <h2>{item.id}</h2>
-                          <img src={item.src} alt="" />
-                        </div>
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Draggable>
-                }
-              )}
-              {provided.placeholder}
-            </div>
-          }}
-        </Droppable>
-      </DragDropContext>
+      if (filesLoading && realFiles) {
+        return (
+          <div>
+            <Spinner></Spinner>
+            {renderDrag()}
+          </div>
+        )
+      }
     }
   };
 };
