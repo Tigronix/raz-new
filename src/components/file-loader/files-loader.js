@@ -12,15 +12,9 @@ import Spinner from '../spinner/';
 import ErrorIndicator from '../error-indicator/';
 import './files-loader.css';
 
-import Dnd from '../dnd';
-
 const FilesLoader = ({
   onFilesChange,
-  files,
-  renderFiles,
   filesLoading,
-  realFiles,
-  renderDrag
 }) => {
 
   const maxSize = 20242880;
@@ -90,8 +84,6 @@ const FilesLoader = ({
         <input {...getInputProps()} />
         <p>Перетащите файлы в эту область или просто нажмите</p>
       </div>
-
-      {renderDrag(realFiles, filesLoading)}
     </div>
   )
 };
@@ -106,11 +98,7 @@ class FilesLoaderContainer extends Component {
       loading,
       error,
       onFilesChange,
-      files,
-      filesLoading,
-      renderFiles,
-      realFiles,
-      renderDrag
+      files
     } = this.props;
 
     if (loading) {
@@ -124,10 +112,6 @@ class FilesLoaderContainer extends Component {
     return <FilesLoader
       onFilesChange={onFilesChange}
       files={files}
-      filesLoading={filesLoading}
-      renderFiles={renderFiles}
-      realFiles={realFiles}
-      renderDrag={renderDrag}
     ></FilesLoader>
   }
 }
@@ -138,8 +122,7 @@ const mapStateToProps = (
       files,
       loading,
       error,
-      filesLoading,
-      realFiles
+      filesLoading
     }
   }
 ) => {
@@ -147,8 +130,7 @@ const mapStateToProps = (
     loading,
     error,
     files,
-    filesLoading,
-    realFiles
+    filesLoading
   };
 };
 
@@ -158,58 +140,6 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
     onFilesChange: (files) => {
       return dispatch(updateFiles(razbiratorService, dispatch, files));
     },
-    renderFiles: (realFiles, filesLoading) => {
-      const renderList = (realFiles) => {
-        return <ul className="files-loader__list">
-          {realFiles.map((file) => {
-            if (file.id) {
-              const { id, src } = file;
-
-              return (
-                <li className="files-loader__li" key={id}>
-                  <h4>{id}</h4>
-                  <div className="files-loader__img-box mb-3">
-                    <img className="files-loader__img" src={src} alt="" />
-                  </div>
-                  <button className="btn btn-primary ml-1" type="button">Rotate left</button>
-                  <button className="btn btn-primary ml-1" type="button">Rotate right</button>
-                  <button className="btn btn-primary ml-1" type="button">Crop</button>
-                  <button className="btn btn-danger ml-1" type="button">Delete</button>
-                </li>
-              )
-            }
-
-            return '';
-          })}
-        </ul>
-      };
-
-
-      if (!realFiles) {
-        if (filesLoading) {
-          return <Spinner></Spinner>
-        }
-        return ''
-      }
-
-      if (filesLoading) {
-        return (
-          <div>
-            <Spinner></Spinner>
-
-            {renderList(realFiles)}
-          </div>
-        )
-      }
-
-      return renderList(realFiles)
-    },
-    renderDrag: (realFiles, filesLoading) => {
-      if (filesLoading) {
-        return <Spinner></Spinner>
-      }
-      return <Dnd realFiles={realFiles}></Dnd>
-    }
   };
 };
 

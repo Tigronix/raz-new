@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import FilesLoader from '../file-loader';
-import Dndn from '../dndn';
+import Dnd from '../dnd';
 
 import { withRazbiratorService } from '../hoc';
 import {
@@ -63,11 +63,10 @@ const FormAddProduct = ({
           </div></div>
         <div className="col">
           <FilesLoader></FilesLoader>
-
+          <Dnd></Dnd>
         </div>
       </div>
       <button className="btn btn-primary">Добавить товар</button>
-      <Dndn></Dndn>
     </form>
   )
 };
