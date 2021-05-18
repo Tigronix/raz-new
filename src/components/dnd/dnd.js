@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
@@ -141,24 +141,29 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
                       draggableId={stringId}
                       index={index}
                     >
-                      {(provided, snapshot) => (
-                        <div>
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.dragHandleProps}
-                            {...provided.draggableProps}
+                      {(provided, snapshot) => {
+                        return (
+                          <Fragment>
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.dragHandleProps}
+                              {...provided.draggableProps}
 
-                            style={getItemStyle(
-                              provided.draggableProps.style,
-                              snapshot.isDragging
-                            )}
-                          >
-                            <h2>{item.id}</h2>
-                            <img src={item.src} alt="" />
-                          </div>
-                          {provided.placeholder}
-                        </div>
-                      )}
+                              style={getItemStyle(
+                                provided.draggableProps.style,
+                                snapshot.isDragging
+                              )}
+                            >
+                              <img src={item.src} alt="" />
+                              <button type="button" className="btn btn-primary mr-1 mb-2 mt-2">Rotate Left</button>
+                              <button type="button" className="btn btn-primary mr-1 mb-2">Rotate Right</button>
+                              <button type="button" className="btn btn-warning mr-1 mb-2">Crop</button>
+                              <button type="button" className="btn btn-danger mr-1 mb-2">Delete</button>
+                            </div>
+                            { provided.placeholder}
+                          </Fragment>
+                        )
+                      }}
                     </Draggable>
                   }
                 )}
