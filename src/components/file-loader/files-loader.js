@@ -60,8 +60,7 @@ const FilesLoader = ({
     getInputProps,
     isDragActive,
     isDragAccept,
-    isDragReject,
-    fileRejections
+    isDragReject
   } = useDropzone({
     accept: 'image/jpeg, image/png',
     minSize: 0,

@@ -131,4 +131,8 @@ export default class RazbiratorService {
     return await res.json();
   }
 
+  async updateCrop(crop) {
+    return crop;
+  }
+
 }

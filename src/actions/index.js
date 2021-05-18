@@ -11,6 +11,9 @@ import {
   reorderRealFiles,
   updateRejectedFiles
 } from './file';
+import {
+  updateCropImage
+} from './crop';
 
 export {
   fetchCarBrands,
@@ -21,5 +24,6 @@ export {
   updateFiles,
   fetchRealFiles,
   reorderRealFiles,
-  updateRejectedFiles
+  updateRejectedFiles,
+  updateCropImage
 };
