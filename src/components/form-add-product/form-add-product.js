@@ -13,6 +13,7 @@ import {
 import { compose } from '../../utils';
 import Spinner from '../spinner/';
 import ErrorIndicator from '../error-indicator/';
+import Crop from '../crop';
 
 import './form-add-product.css';
 
@@ -21,8 +22,19 @@ const FormAddProduct = ({
   models,
   onBrandSelected,
   selectedModels,
-  filesLoading
+  filesLoading,
+  crop,
+  cropFile
 }) => {
+  const renderCrop = () => {
+    console.log('RNDER??', cropFile);
+    if(!cropFile){
+      return null;
+    }
+
+    return <Crop></Crop>
+  };
+
 
   return (
     <form className="form-add-product">
@@ -64,6 +76,7 @@ const FormAddProduct = ({
         <div className="col">
           <FilesLoader></FilesLoader>
           <Dnd></Dnd>
+          {renderCrop()}
         </div>
       </div>
       <button className="btn btn-primary">Добавить товар</button>
@@ -88,7 +101,9 @@ class FormAddProductContainer extends Component {
       selectedModels,
       onFilesChange,
       files,
-      filesLoading
+      filesLoading,
+      crop,
+      cropFile
     } = this.props;
 
     if (loading) {
@@ -109,6 +124,8 @@ class FormAddProductContainer extends Component {
       onFilesChange={onFilesChange}
       files={files}
       filesLoading={filesLoading}
+      crop={crop}
+      cropFile={cropFile}
     ></FormAddProduct>
   }
 }
@@ -116,7 +133,8 @@ class FormAddProductContainer extends Component {
 const mapStateToProps = (
   {
     car: { brandOptions, loading, error, selectedBrand, models, selectedModels },
-    files: { files }
+    files: { files },
+    crop: { crop, cropFile }
   }
 ) => {
   return {
@@ -126,7 +144,9 @@ const mapStateToProps = (
     selectedBrand,
     models,
     selectedModels,
-    files
+    files,
+    crop,
+    cropFile
   };
 };
 

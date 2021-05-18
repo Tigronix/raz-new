@@ -132,7 +132,11 @@ export default class RazbiratorService {
   }
 
   async updateCrop(crop) {
-    return crop;
+    return await crop;
+  }
+
+  async getCrop(cropFile) {
+    return await cropFile;
   }
 
 }

@@ -12,18 +12,13 @@ import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
 const Crop = ({
-  onCropComplete
+  onCropComplete,
+  cropFile
 }) => {
-  const [upImg, setUpImg] = useState();
   const imgRef = useRef(null);
   const previewCanvasRef = useRef(null);
   const [crop, setCrop] = useState();
   const [completedCrop, setCompletedCrop] = useState(null);
-
-  const onSelectFile = (e) => {
-    const imgSrc = e.target.getAttribute('data-img');
-    setUpImg(imgSrc);
-  };
 
   const onLoad = useCallback((img) => {
     imgRef.current = img;
@@ -64,15 +59,8 @@ const Crop = ({
 
   return (
     <div className="App">
-      <div>
-          <img src="https://test.tt//uploads/2021-5/siMyLB248821c2773308543c33fb8aec69b04c.png" alt=""/>
-          <button type="button" className="btn btn-primary mr-1 mb-2 mt-2">Rotate Left</button>
-          <button type="button" className="btn btn-primary mr-1 mb-2">Rotate Right</button>
-          <button data-img="https://test.tt//uploads/2021-5/siMyLB248821c2773308543c33fb8aec69b04c.png" onClick={onSelectFile} type="button" className="btn btn-warning mr-1 mb-2">Crop</button>
-          <button  type="button" className="btn btn-danger mr-1 mb-2">Delete</button>
-      </div>
       <ReactCrop
-        src={upImg}
+        src={cropFile.src}
         onImageLoaded={onLoad}
         crop={crop}
         onChange={(c) => setCrop(c)}
@@ -83,27 +71,24 @@ const Crop = ({
           ref={previewCanvasRef}
           // Rounding is important so the canvas width and height matches/is a multiple for sharpness.
           style={{
+            display: 'none',
             width: Math.round(completedCrop?.width ?? 0),
             height: Math.round(completedCrop?.height ?? 0)
           }}
         />
       </div>
-      <p>
-        Note that the download below won't work in this sandbox due to the
-        iframe missing 'allow-downloads'. It's just for your reference.
-      </p>
       <button
         type="button"
-        onClick={  useCallback(() => {
+        onClick={useCallback(() => {
           console.log(completedCrop);
-          if(completedCrop){
+          if (completedCrop) {
             onCropComplete(completedCrop)
           }
-          
+
         }, [completedCrop])}
-        
+
       >
-        Download cropped image
+        Сохранить картинку
       </button>
     </div>
   );
@@ -111,14 +96,15 @@ const Crop = ({
 
 class CropContainer extends Component {
   componentDidMount() {
-    
+
   }
 
   render() {
     const {
       loading,
       error,
-      onCropComplete
+      onCropComplete,
+      cropFile
     } = this.props;
 
     if (loading) {
@@ -130,7 +116,7 @@ class CropContainer extends Component {
     }
 
     return (
-      <Crop onCropComplete={onCropComplete}></Crop>
+      <Crop onCropComplete={onCropComplete} cropFile={cropFile}></Crop>
     )
   }
 }
@@ -140,14 +126,16 @@ const mapStateToProps = (
     crop: {
       loading,
       error,
-      crop
+      crop,
+      cropFile
     }
   }
 ) => {
   return {
     loading,
     error,
-    crop
+    crop,
+    cropFile
   };
 };
 

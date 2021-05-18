@@ -8,7 +8,33 @@ const updateCrop = (state, action) => {
   }
 
   switch (action.type) {
-    // fetch files
+    // get crop
+    case 'GET_CROP_REQUEST':
+      return {
+        crop: {},
+        cropFile: {},
+        loading: true,
+        error: null
+      };
+
+    case 'GET_CROP_SUCCESS':
+      console.log('GET_CROP_SUCCESS', action.payload);
+
+      return {
+        crop: {},
+        cropFile: action.payload,
+        loading: null,
+        error: null
+      };
+
+    case 'GET_CROP_FAILURE':
+      return {
+        crop: {},
+        cropFile: {},
+        loading: null,
+        error: true
+      };
+    // update crop
     case 'UPDATE_CROP_REQUEST':
       return {
         crop: {},

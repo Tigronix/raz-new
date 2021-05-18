@@ -1,11 +1,12 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 import { withRazbiratorService } from '../hoc';
 import {
   fetchFiles,
-  reorderRealFiles
+  reorderRealFiles,
+  getCropImage
 } from '../../actions';
 import { compose } from '../../utils';
 import Spinner from '../spinner';
@@ -15,11 +16,12 @@ const Dnd = ({
   realFiles,
   renderDnd,
   onDragEnd,
-  filesLoading
+  filesLoading,
+  getCrop
 }) => {
   return (
     <div>
-      {renderDnd(realFiles, onDragEnd, filesLoading)}
+      {renderDnd(realFiles, onDragEnd, filesLoading, getCrop)}
     </div>
   )
 };
@@ -36,7 +38,8 @@ class DndContainer extends Component {
       realFiles,
       renderDnd,
       onDragEnd,
-      filesLoading
+      filesLoading,
+      getCrop
     } = this.props;
 
     if (loading) {
@@ -52,6 +55,7 @@ class DndContainer extends Component {
       realFiles={realFiles}
       onDragEnd={onDragEnd}
       filesLoading={filesLoading}
+      getCrop={getCrop}
     ></Dnd>
   }
 }
@@ -100,7 +104,7 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
 
       return dispatch(reorderRealFiles(items));
     },
-    renderDnd: (realFiles, onDragEnd, filesLoading) => {
+    renderDnd: (realFiles, onDragEnd, filesLoading, getCrop) => {
       const renderDrag = () => {
         const grid = 8;
 
@@ -156,7 +160,11 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
                               <img src={item.src} alt="" />
                               <button type="button" className="btn btn-primary mr-1 mb-2 mt-2">Rotate Left</button>
                               <button type="button" className="btn btn-primary mr-1 mb-2">Rotate Right</button>
-                              <button type="button" className="btn btn-warning mr-1 mb-2">Crop</button>
+                              <button
+                                onClick={useCallback(() => {
+                                  getCrop(item)
+                                }, [])}
+                                type="button" className="btn btn-warning mr-1 mb-2">Crop</button>
                               <button type="button" className="btn btn-danger mr-1 mb-2">Delete</button>
                             </div>
                             { provided.placeholder}
@@ -190,6 +198,9 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
           </div>
         )
       }
+    },
+    getCrop: (cropFile) => {
+      getCropImage(razbiratorService, dispatch, cropFile)
     }
   };
 };

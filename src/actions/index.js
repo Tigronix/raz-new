@@ -12,7 +12,8 @@ import {
   updateRejectedFiles
 } from './file';
 import {
-  updateCropImage
+  updateCropImage,
+  getCropImage
 } from './crop';
 
 export {
@@ -25,5 +26,6 @@ export {
   fetchRealFiles,
   reorderRealFiles,
   updateRejectedFiles,
-  updateCropImage
+  updateCropImage,
+  getCropImage
 };
