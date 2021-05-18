@@ -107,7 +107,6 @@ const getFiles = (state, action) => {
       
     // update rejected files
     case 'UPDATE_REJECTED_FILES':
-      console.log(`UPDATE_REJECTED_FILES`, action.payload)
       return {
         files: state.files.files,
         realFiles: state.files.realFiles,

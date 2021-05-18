@@ -87,7 +87,6 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
         return result;
       };
 
-      console.log(result, realFiles);
       // dropped outside the list
       if (!result.destination) {
         return;

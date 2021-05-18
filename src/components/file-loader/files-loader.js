@@ -22,8 +22,6 @@ const FilesLoader = ({
   rejectedFiles
 }) => {
 
-  console.log('FilesLoader********************', rejectedFiles);
-
   const maxSize = 20000000;
   const baseStyle = {
     flex: 1,
@@ -86,7 +84,6 @@ const FilesLoader = ({
   ]);
 
   const renderErrors = (rejectedFiles) => {
-    // console.log('renderErrors', fileRejections);
     if (!rejectedFiles) {
       return null;
     }
