@@ -18,8 +18,6 @@ const updateCrop = (state, action) => {
       };
 
     case 'GET_CROP_SUCCESS':
-      console.log('GET_CROP_SUCCESS', action.payload);
-
       return {
         crop: {},
         cropFile: action.payload,

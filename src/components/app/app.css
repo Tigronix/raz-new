@@ -53,3 +53,15 @@ a {
   text-decoration: none;
   color: currentColor;
 }
+
+.hidden-field {
+  position: relative;
+}
+
+.hidden-field__field {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+}

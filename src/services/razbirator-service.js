@@ -139,4 +139,16 @@ export default class RazbiratorService {
     return await cropFile;
   }
 
+  async submitForm(formData) {
+    const res = await fetch(`${this._apiBase}add-product.php`, {
+      method: 'POST',
+      header: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    });
+    
+    return await res.json();
+  }
+
 }

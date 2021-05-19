@@ -15,6 +15,9 @@ import {
   updateCropImage,
   getCropImage
 } from './crop';
+import {
+  insertFormData
+} from './form-data';
 
 export {
   fetchCarBrands,
@@ -27,5 +30,6 @@ export {
   reorderRealFiles,
   updateRejectedFiles,
   updateCropImage,
-  getCropImage
+  getCropImage,
+  insertFormData
 };

@@ -9,8 +9,13 @@ import {
   fetchCarBrands,
   brandSelected,
   fetchCarModels,
+  insertFormData
 } from '../../actions';
-import { compose } from '../../utils';
+import {
+  compose,
+  getFormData,
+  selectValidation
+} from '../../utils';
 import Spinner from '../spinner/';
 import ErrorIndicator from '../error-indicator/';
 import Crop from '../crop';
@@ -24,46 +29,54 @@ const FormAddProduct = ({
   selectedModels,
   filesLoading,
   crop,
-  cropFile
+  cropFile,
+  onSubmit,
+  selectedBrand,
+  realFiles
 }) => {
+
   const renderCrop = () => {
-    console.log('RNDER??', cropFile);
-    if(!cropFile){
+    if (!cropFile) {
       return null;
     }
 
     return <Crop></Crop>
   };
 
-
   return (
-    <form className="form-add-product">
+    <form className="form-add-product" onSubmit={(e) => onSubmit(e, selectedBrand, selectedModels)}>
       <h1>{filesLoading}</h1>
       <h2>Добавление товара</h2>
       <div className="row">
         <div className="col">
           <div className="form-group">
             <h4>Марки</h4>
-            <Select
-              placeholder="Марки"
-              options={brandOptions}
-              onChange={(selectedBrand) => onBrandSelected(brandOptions, selectedBrand, models, selectedModels)}
-              name="brands"
-              closeMenuOnSelect={false}
-              isMulti
-              isSearchable
-            />
+            <div className="hidden-field">
+              <Select
+                placeholder="Марки"
+                options={brandOptions}
+                onChange={(selectedBrand) => onBrandSelected(brandOptions, selectedBrand, models, selectedModels)}
+                closeMenuOnSelect={false}
+                isMulti
+                isSearchable
+                required
+              />
+              <input type="text" required defaultValue={selectValidation(selectedBrand)} className="hidden-field__field" />
+            </div>
           </div>
           <div className="form-group">
             <h4>Модели</h4>
-            <Select
-              placeholder="Модели"
-              options={selectedModels}
-              closeMenuOnSelect={false}
-              name="models"
-              isMulti
-              isSearchable
-            />
+            <div className="hidden-field">
+              <Select
+                placeholder="Модели"
+                options={selectedModels}
+                closeMenuOnSelect={false}
+                isMulti
+                isSearchable
+                required
+              />
+              <input type="text" required defaultValue={selectValidation(selectedModels)} className="hidden-field__field" />
+            </div>
           </div>
           <div className="form-group">
             <h4>Цена</h4>
@@ -71,8 +84,9 @@ const FormAddProduct = ({
           </div>
           <div className="form-group">
             <h4>ОЕМ</h4>
-            <input name="oem" className="form-control" type="text" placeholder="ОЕМ" />
-          </div></div>
+            <input name="oem" className="form-control" type="text" placeholder="ОЕМ" required />
+          </div>
+        </div>
         <div className="col">
           <FilesLoader></FilesLoader>
           <Dnd></Dnd>
@@ -103,7 +117,9 @@ class FormAddProductContainer extends Component {
       files,
       filesLoading,
       crop,
-      cropFile
+      cropFile,
+      onSubmit,
+      realFiles
     } = this.props;
 
     if (loading) {
@@ -126,6 +142,8 @@ class FormAddProductContainer extends Component {
       filesLoading={filesLoading}
       crop={crop}
       cropFile={cropFile}
+      onSubmit={onSubmit}
+      realFiles={realFiles}
     ></FormAddProduct>
   }
 }
@@ -133,7 +151,7 @@ class FormAddProductContainer extends Component {
 const mapStateToProps = (
   {
     car: { brandOptions, loading, error, selectedBrand, models, selectedModels },
-    files: { files },
+    files: { files, realFiles },
     crop: { crop, cropFile }
   }
 ) => {
@@ -145,6 +163,7 @@ const mapStateToProps = (
     models,
     selectedModels,
     files,
+    realFiles,
     crop,
     cropFile
   };
@@ -156,6 +175,17 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
     fetchCarModels: fetchCarModels(razbiratorService, dispatch),
     onBrandSelected: (brandOptions, selectedBrand, models, selectedModels) => {
       return dispatch(brandSelected(brandOptions, selectedBrand, models, selectedModels));
+    },
+    onSubmit: (e, selectedBrand, selectedModels, realFiles) => {
+      e.preventDefault();
+      const formData = getFormData(e);
+
+      formData.selectedBrand = selectedBrand;
+      formData.selectedModels = selectedModels;
+      formData.realFiles = realFiles;
+      console.log('onSubmit', formData);
+
+      insertFormData(razbiratorService, dispatch, formData);
     }
   };
 };

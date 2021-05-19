@@ -80,12 +80,9 @@ const Crop = ({
       <button
         type="button"
         onClick={useCallback(() => {
-          console.log(completedCrop);
-          if (completedCrop) {
             onCropComplete(completedCrop)
-          }
 
-        }, [completedCrop])}
+        }, [completedCrop, onCropComplete])}
 
       >
         Сохранить картинку

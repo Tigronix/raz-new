@@ -51,10 +51,6 @@ const FilesLoader = ({
     borderColor: '#ff1744'
   };
 
-  const disabledStyle = {
-    background: '#ccc'
-  };
-
   const {
     getRootProps,
     getInputProps,
