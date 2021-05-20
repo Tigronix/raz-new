@@ -7,7 +7,7 @@ const selectValidation = (arr) => {
   }
 
   arr.map((item) => {
-    newArr.push(item)
+    return newArr.push(item)
   });
   
   return newArr
