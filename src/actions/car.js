@@ -1,3 +1,5 @@
+import objToArr from '../utils/obj-to-arr';
+
 // car brands
 const carBrandsRequested = () => {
   return {
@@ -40,30 +42,47 @@ const carModelsError = (error) => {
   }
 };
 
-const brandSelected = (brandOptions, selectedBrand, models, selectedModels) => {
+const brandSelected = (brandOptions, selectedBrand, models, filteredModels) => {
   return {
     type: 'BRAND_SELECTED',
     payload: {
       brandOptions,
       selectedBrand,
       models,
-      selectedModels
+      filteredModels
     }
+  };
+};
+
+const modelsSelected = (selectedModels) => {
+  return {
+    type: 'MODELS_SELECTED',
+    payload: selectedModels
   };
 };
 
 const fetchCarBrands = (razbiratorService, dispatch) => () => {
   dispatch(carBrandsRequested());
-  razbiratorService.getCarBrands()
-    .then((data) => dispatch(carBrandsLoaded(data)))
-    .catch((err) => dispatch(carBrandsError(err)));
+  razbiratorService.getResource('get-brands.php')
+    .then((data) => {
+      const arr = Array.from(objToArr(data));
+      const result = arr.map(({ id: value, name: label }) => ({ value, label }));
+
+      dispatch(carBrandsLoaded(result))
+    })
+    .catch((err) => {
+      dispatch(carBrandsError(err))
+    });
 };
 
 const fetchCarModels = (razbiratorService, dispatch) => () => {
   dispatch(carModelsRequested());
-  razbiratorService.getCarModels()
+  razbiratorService.getResource('get-models.php')
     .then((data) => {
-      dispatch(carModelsLoaded(data))
+      const arr = Array.from(objToArr(data));
+      const result = arr.map(({ id: value, name: label, brand_id: brandId }) => ({ value, label, brandId }));
+
+      dispatch(carModelsLoaded(result))
     })
     .catch((err) => {
       dispatch(carModelsError(err))
@@ -73,5 +92,6 @@ const fetchCarModels = (razbiratorService, dispatch) => () => {
 export {
   fetchCarBrands,
   fetchCarModels,
-  brandSelected
+  brandSelected,
+  modelsSelected
 };

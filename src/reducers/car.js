@@ -1,5 +1,5 @@
 const brandSelected = (state, action) => {
-  let selectedModels = [];
+  let filteredModels = [];
   const { selectedBrand, models } = action;
   selectedBrand.forEach((brand) => {
     const { value } = brand;
@@ -8,7 +8,7 @@ const brandSelected = (state, action) => {
       const { brandId } = model;
 
       if (brandId === value) {
-        selectedModels.push(model);
+        filteredModels.push(model);
       }
     })
   });
@@ -17,7 +17,8 @@ const brandSelected = (state, action) => {
     brandOptions: action.brandOptions,
     selectedBrand: action.selectedBrand,
     models: action.models,
-    selectedModels: selectedModels,
+    filteredModels: filteredModels,
+    selectedModels: state.car.selectedModels,
     loading: false,
     error: null
   }
@@ -29,6 +30,7 @@ const updateCar = (state, action) => {
       brandOptions: [],
       selectedBrand: [],
       models: [],
+      filteredModels: [],
       selectedModels: [],
       loading: true,
       error: null,
@@ -41,7 +43,8 @@ const updateCar = (state, action) => {
         brandOptions: [],
         selectedBrand: [],
         models: [],
-        selectedModels: [],
+        filteredModels: [],
+        selectedModels: state.car.selectedModels,
         loading: true,
         error: null
       };
@@ -51,7 +54,8 @@ const updateCar = (state, action) => {
         brandOptions: action.carbrands,
         selectedBrand: [],
         models: [],
-        selectedModels: [],
+        filteredModels: [],
+        selectedModels: state.car.selectedModels,
         loading: false,
         error: null
       };
@@ -61,7 +65,8 @@ const updateCar = (state, action) => {
         brandOptions: [],
         selectedBrand: [],
         models: [],
-        selectedModels: [],
+        filteredModels: [],
+        selectedModels: state.car.selectedModels,
         loading: false,
         error: action.payload
       };
@@ -71,7 +76,8 @@ const updateCar = (state, action) => {
         brandOptions: [],
         selectedBrand: [],
         models: [],
-        selectedModels: [],
+        filteredModels: [],
+        selectedModels: state.car.selectedModels,
         loading: true,
         error: null
       };
@@ -80,7 +86,8 @@ const updateCar = (state, action) => {
       return {
         brandOptions: state.car.brandOptions,
         selectedBrand: [],
-        selectedModels: [],
+        filteredModels: [],
+        selectedModels: state.car.selectedModels,
         models: action.models,
         loading: false,
         error: null
@@ -91,13 +98,25 @@ const updateCar = (state, action) => {
         brandOptions: state.carbrands,
         selectedBrand: [],
         models: [],
-        selectedModels: [],
+        filteredModels: [],
+        selectedModels: state.car.selectedModels,
         loading: false,
         error: action.payload
       };
 
     case 'BRAND_SELECTED':
       return brandSelected(state, action.payload);
+
+    case 'MODELS_SELECTED':
+      return {
+        brandOptions: state.car.brandOptions,
+        selectedBrand: state.car.selectedBrand,
+        models: state.car.models,
+        filteredModels: state.car.filteredModels,
+        selectedModels: action.payload,
+        loading: null,
+        error: null
+      }
 
     default:
       return state.car

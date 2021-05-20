@@ -9,7 +9,8 @@ import {
   fetchCarBrands,
   brandSelected,
   fetchCarModels,
-  insertFormData
+  insertFormData,
+  modelsSelected
 } from '../../actions';
 import {
   compose,
@@ -26,13 +27,15 @@ const FormAddProduct = ({
   brandOptions,
   models,
   onBrandSelected,
-  selectedModels,
+  filteredModels,
   filesLoading,
   crop,
   cropFile,
   onSubmit,
   selectedBrand,
-  realFiles
+  realFiles,
+  onModelsSelected,
+  selectedModels
 }) => {
 
   const renderCrop = () => {
@@ -43,8 +46,9 @@ const FormAddProduct = ({
     return <Crop></Crop>
   };
 
+
   return (
-    <form className="form-add-product" onSubmit={(e) => onSubmit(e, selectedBrand, selectedModels)}>
+    <form className="form-add-product" onSubmit={(e) => onSubmit(e, selectedBrand, selectedModels, realFiles)}>
       <h1>{filesLoading}</h1>
       <h2>Добавление товара</h2>
       <div className="row">
@@ -55,7 +59,7 @@ const FormAddProduct = ({
               <Select
                 placeholder="Марки"
                 options={brandOptions}
-                onChange={(selectedBrand) => onBrandSelected(brandOptions, selectedBrand, models, selectedModels)}
+                onChange={(selectedBrand) => onBrandSelected(brandOptions, selectedBrand, models, filteredModels)}
                 closeMenuOnSelect={false}
                 isMulti
                 isSearchable
@@ -69,7 +73,8 @@ const FormAddProduct = ({
             <div className="hidden-field">
               <Select
                 placeholder="Модели"
-                options={selectedModels}
+                options={filteredModels}
+                onChange={(selectedModels) => onModelsSelected(selectedModels)}
                 closeMenuOnSelect={false}
                 isMulti
                 isSearchable
@@ -84,7 +89,7 @@ const FormAddProduct = ({
           </div>
           <div className="form-group">
             <h4>ОЕМ</h4>
-            <input name="oem" className="form-control" type="text" placeholder="ОЕМ" required />
+            <input name="oem" className="form-control" type="text" placeholder="ОЕМ" />
           </div>
         </div>
         <div className="col">
@@ -112,14 +117,16 @@ class FormAddProductContainer extends Component {
       selectedBrand,
       onBrandSelected,
       models,
-      selectedModels,
+      filteredModels,
       onFilesChange,
       files,
       filesLoading,
       crop,
       cropFile,
       onSubmit,
-      realFiles
+      realFiles,
+      onModelsSelected,
+      selectedModels
     } = this.props;
 
     if (loading) {
@@ -136,7 +143,7 @@ class FormAddProductContainer extends Component {
       brandOptions={brandOptions}
       onBrandSelected={onBrandSelected}
       models={models}
-      selectedModels={selectedModels}
+      filteredModels={filteredModels}
       onFilesChange={onFilesChange}
       files={files}
       filesLoading={filesLoading}
@@ -144,13 +151,15 @@ class FormAddProductContainer extends Component {
       cropFile={cropFile}
       onSubmit={onSubmit}
       realFiles={realFiles}
+      onModelsSelected={onModelsSelected}
+      selectedModels={selectedModels}
     ></FormAddProduct>
   }
 }
 
 const mapStateToProps = (
   {
-    car: { brandOptions, loading, error, selectedBrand, models, selectedModels },
+    car: { brandOptions, loading, error, selectedBrand, models, filteredModels, selectedModels },
     files: { files, realFiles },
     crop: { crop, cropFile }
   }
@@ -161,11 +170,12 @@ const mapStateToProps = (
     error,
     selectedBrand,
     models,
-    selectedModels,
+    filteredModels,
     files,
     realFiles,
     crop,
-    cropFile
+    cropFile,
+    selectedModels
   };
 };
 
@@ -173,8 +183,11 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
   return {
     fetchCarBrands: fetchCarBrands(razbiratorService, dispatch),
     fetchCarModels: fetchCarModels(razbiratorService, dispatch),
-    onBrandSelected: (brandOptions, selectedBrand, models, selectedModels) => {
-      return dispatch(brandSelected(brandOptions, selectedBrand, models, selectedModels));
+    onBrandSelected: (brandOptions, selectedBrand, models, filteredModels) => {
+      return dispatch(brandSelected(brandOptions, selectedBrand, models, filteredModels));
+    },
+    onModelsSelected: (selectedModels) => {
+      return dispatch(modelsSelected(selectedModels));
     },
     onSubmit: (e, selectedBrand, selectedModels, realFiles) => {
       e.preventDefault();
@@ -183,7 +196,6 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
       formData.selectedBrand = selectedBrand;
       formData.selectedModels = selectedModels;
       formData.realFiles = realFiles;
-      console.log('onSubmit', formData);
 
       insertFormData(razbiratorService, dispatch, formData);
     }

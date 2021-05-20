@@ -1,7 +1,8 @@
 import {
   fetchCarBrands,
   fetchCarModels,
-  brandSelected
+  brandSelected,
+  modelsSelected
 } from './car';
 import {
   getFiles,
@@ -31,5 +32,6 @@ export {
   updateRejectedFiles,
   updateCropImage,
   getCropImage,
-  insertFormData
+  insertFormData,
+  modelsSelected
 };
