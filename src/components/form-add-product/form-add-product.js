@@ -85,11 +85,11 @@ const FormAddProduct = ({
           </div>
           <div className="form-group">
             <h4>Цена</h4>
-            <input name="price" className="form-control" type="text" placeholder="Цена" />
+            <input required name="price" className="form-control" type="text" placeholder="Цена" />
           </div>
           <div className="form-group">
             <h4>ОЕМ</h4>
-            <input name="oem" className="form-control" type="text" placeholder="ОЕМ" />
+            <input required name="oem" className="form-control" type="text" placeholder="ОЕМ" />
           </div>
         </div>
         <div className="col">
