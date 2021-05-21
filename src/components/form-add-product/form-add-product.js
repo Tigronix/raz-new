@@ -62,7 +62,6 @@ const FormAddProduct = ({
 
   return (
     <form className="form-add-product" onSubmit={(e) => onSubmit(e, selectedBrand, selectedModels, realFiles)}>
-      {renderSubmitSuccess()}
       <h2>Добавление товара</h2>
       <div className="row">
         <div className="col">
@@ -150,8 +149,8 @@ class FormAddProductContainer extends Component {
     const isSuccess = formData === 'ok';
 
     if (isSuccess) {
-
-      return renderRedirect(formData)
+      renderRedirect();
+      return <Redirect to="/" push></Redirect>
     }
 
     if (loading) {
@@ -180,6 +179,7 @@ class FormAddProductContainer extends Component {
       formData={formData}
       formDataLoading={formDataLoading}
       link={link}
+      renderRedirect={renderRedirect}
     ></FormAddProduct>
   }
 }
@@ -255,8 +255,6 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
     },
     renderRedirect: () => {
       resetState(dispatch, '/');
-      return <Redirect to="/" push></Redirect>
-
     }
   };
 };
