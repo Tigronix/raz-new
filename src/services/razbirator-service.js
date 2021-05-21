@@ -57,4 +57,15 @@ export default class RazbiratorService {
     return await res.json();
   }
 
+  async fetchProducts() {
+    const res = await fetch(`${this._apiBase}get-products.php`, {
+      method: 'POST',
+      header: {
+        'Content-Type': 'application/json'
+      },
+    });
+
+    return await res.json();
+  }
+
 }

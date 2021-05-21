@@ -23,6 +23,9 @@ import {
 import {
   resetState
 } from './reset-state';
+import {
+  fetchProducts
+} from './products';
 
 export {
   fetchCarBrands,
@@ -39,5 +42,6 @@ export {
   insertFormData,
   modelsSelected,
   clearModels,
-  resetState
+  resetState,
+  fetchProducts
 };

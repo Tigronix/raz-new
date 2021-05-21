@@ -3,6 +3,7 @@ import getFiles from './file';
 import updateCrop from './crop';
 import updateFormData from './form-data';
 import updateResetState from './reset-state';
+import updateProducts from './products';
 
 const reducer = (state, action) => {
   // console.log('STATE', state);
@@ -19,7 +20,8 @@ const reducer = (state, action) => {
     files: getFiles(state, action),
     crop: updateCrop(state, action),
     formData: updateFormData(state, action),
-    redirect: updateResetState(state, action)
+    redirect: updateResetState(state, action),
+    products: updateProducts(state, action)
   };
 };
 
