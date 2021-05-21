@@ -35,11 +35,7 @@ const FormAddProduct = ({
   selectedBrand,
   realFiles,
   onModelsSelected,
-  selectedModels,
-  formData,
-  formDataLoading,
-  link,
-  renderRedirect
+  selectedModels
 }) => {
 
   const renderCrop = () => {
@@ -48,16 +44,6 @@ const FormAddProduct = ({
     }
 
     return <Crop></Crop>
-  };
-
-  const renderSubmitSuccess = () => {
-    const isSuccess = formData === 'ok';
-
-    if (isSuccess) {
-      return <Redirect to="/" push></Redirect>
-    }
-
-    return '';
   };
 
   return (
@@ -111,7 +97,6 @@ const FormAddProduct = ({
           {renderCrop()}
         </div>
       </div>
-      {/* <Redirect to="/" push /> */}
     </form>
 
   )
@@ -141,8 +126,6 @@ class FormAddProductContainer extends Component {
       onModelsSelected,
       selectedModels,
       formData,
-      formDataLoading,
-      link,
       renderRedirect
     } = this.props;
 
@@ -161,7 +144,6 @@ class FormAddProductContainer extends Component {
       return <ErrorIndicator></ErrorIndicator>
     }
 
-
     return <FormAddProduct
       selectedBrand={selectedBrand}
       brandOptions={brandOptions}
@@ -177,9 +159,6 @@ class FormAddProductContainer extends Component {
       onModelsSelected={onModelsSelected}
       selectedModels={selectedModels}
       formData={formData}
-      formDataLoading={formDataLoading}
-      link={link}
-      renderRedirect={renderRedirect}
     ></FormAddProduct>
   }
 }
@@ -189,8 +168,7 @@ const mapStateToProps = (
     car: { brandOptions, loading, error, selectedBrand, models, filteredModels, selectedModels },
     files: { files, realFiles },
     crop: { crop, cropFile },
-    formData: { formData, formDataLoading, formDataError },
-    redirect: { link }
+    formData: { formData}
   }
 ) => {
   return {
@@ -206,8 +184,6 @@ const mapStateToProps = (
     cropFile,
     selectedModels,
     formData,
-    formDataLoading,
-    link
   };
 };
 

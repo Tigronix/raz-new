@@ -5,8 +5,8 @@ import updateFormData from './form-data';
 import updateResetState from './reset-state';
 
 const reducer = (state, action) => {
-  console.log('STATE', state);
-  console.log('ACTION', action);
+  // console.log('STATE', state);
+  // console.log('ACTION', action);
 
   const isResetState = action.type === 'RESET_STATE';
 
