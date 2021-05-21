@@ -11,7 +11,8 @@ import {
   brandSelected,
   fetchCarModels,
   insertFormData,
-  modelsSelected
+  modelsSelected,
+  resetState
 } from '../../actions';
 import {
   compose,
@@ -35,7 +36,10 @@ const FormAddProduct = ({
   realFiles,
   onModelsSelected,
   selectedModels,
-  formData
+  formData,
+  formDataLoading,
+  link,
+  renderRedirect
 }) => {
 
   const renderCrop = () => {
@@ -46,23 +50,19 @@ const FormAddProduct = ({
     return <Crop></Crop>
   };
 
-  const renderRedirect = () => {
-    const isSubmitSuccess = formData === 'ok';
+  const renderSubmitSuccess = () => {
+    const isSuccess = formData === 'ok';
 
-    if(isSubmitSuccess){
-      return (
-        <h1>WOW!</h1>
-      )
+    if (isSuccess) {
+      return <Redirect to="/" push></Redirect>
     }
 
-    return (
-      <h1>BAD!</h1>
-    )
+    return '';
   };
 
   return (
     <form className="form-add-product" onSubmit={(e) => onSubmit(e, selectedBrand, selectedModels, realFiles)}>
-      {renderRedirect()}
+      {renderSubmitSuccess()}
       <h2>Добавление товара</h2>
       <div className="row">
         <div className="col">
@@ -76,9 +76,8 @@ const FormAddProduct = ({
                 closeMenuOnSelect={false}
                 isMulti
                 isSearchable
-                required
               />
-              <input type="text" required defaultValue={selectValidation(selectedBrand)} className="hidden-field__field" />
+              <input type="text" defaultValue={selectValidation(selectedBrand)} className="hidden-field__field" />
             </div>
           </div>
           <div className="form-group">
@@ -92,18 +91,18 @@ const FormAddProduct = ({
                 closeMenuOnSelect={false}
                 isMulti
                 isSearchable
-                required
+
               />
-              <input type="text" required defaultValue={selectValidation(selectedModels)} className="hidden-field__field" />
+              <input type="text" defaultValue={selectValidation(selectedModels)} className="hidden-field__field" />
             </div>
           </div>
           <div className="form-group">
             <h4>Цена</h4>
-            <input required name="price" className="form-control" type="text" placeholder="Цена" />
+            <input name="price" className="form-control" type="text" placeholder="Цена" />
           </div>
           <div className="form-group">
             <h4>ОЕМ</h4>
-            <input required name="oem" className="form-control" type="text" placeholder="ОЕМ" />
+            <input name="oem" className="form-control" type="text" placeholder="ОЕМ" />
           </div>
           <button className="btn btn-primary">Добавить товар</button>
         </div>
@@ -142,8 +141,18 @@ class FormAddProductContainer extends Component {
       realFiles,
       onModelsSelected,
       selectedModels,
-      formData
+      formData,
+      formDataLoading,
+      link,
+      renderRedirect
     } = this.props;
+
+    const isSuccess = formData === 'ok';
+
+    if (isSuccess) {
+
+      return renderRedirect(formData)
+    }
 
     if (loading) {
       return <Spinner></Spinner>;
@@ -169,6 +178,8 @@ class FormAddProductContainer extends Component {
       onModelsSelected={onModelsSelected}
       selectedModels={selectedModels}
       formData={formData}
+      formDataLoading={formDataLoading}
+      link={link}
     ></FormAddProduct>
   }
 }
@@ -178,7 +189,8 @@ const mapStateToProps = (
     car: { brandOptions, loading, error, selectedBrand, models, filteredModels, selectedModels },
     files: { files, realFiles },
     crop: { crop, cropFile },
-    formData: { formData }
+    formData: { formData, formDataLoading, formDataError },
+    redirect: { link }
   }
 ) => {
   return {
@@ -193,7 +205,9 @@ const mapStateToProps = (
     crop,
     cropFile,
     selectedModels,
-    formData
+    formData,
+    formDataLoading,
+    link
   };
 };
 
@@ -238,6 +252,11 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
       formData.realFiles = realFiles;
 
       insertFormData(razbiratorService, dispatch, formData);
+    },
+    renderRedirect: () => {
+      resetState(dispatch, '/');
+      return <Redirect to="/" push></Redirect>
+
     }
   };
 };

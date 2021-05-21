@@ -2,8 +2,8 @@ const updateFormData = (state, action) => {
   if (state === undefined) {
     return {
       formData: [],
-      loading: null,
-      error: null
+      formDataLoading: null,
+      formDataError: null
     }
   }
 
@@ -11,22 +11,22 @@ const updateFormData = (state, action) => {
     case 'SUBMIT_FORM_REQUEST':
       return {
         formData: {},
-        loading: true,
-        error: null
+        formDataLoading: true,
+        formDataError: null
       };
 
     case 'SUBMIT_FORM_SUCCESS':
       return {
         formData: action.payload,
-        loading: null,
-        error: null
+        formDataLoading: null,
+        formDataError: null
       };
 
     case 'SUBMIT_FORM_FAILURE':
       return {
         formData: {},
-        loading: null,
-        error: true
+        formDataLoading: null,
+        formDataError: true
       };
 
     default:

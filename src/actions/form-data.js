@@ -1,5 +1,3 @@
-
-
 // submit form data
 const submitRequested = () => {
   return {
@@ -25,9 +23,7 @@ const insertFormData = (razbiratorService, dispatch, formData) => {
   dispatch(submitRequested());
   razbiratorService.submitForm(formData)
     .then((data) => {
-      console.log('**********************', data);
       dispatch(submitLoaded(data));
-      // dispatch(push('/'));
     })
     .catch((err) => {
       dispatch(submitError(err))

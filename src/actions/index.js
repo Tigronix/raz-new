@@ -20,6 +20,9 @@ import {
 import {
   insertFormData
 } from './form-data';
+import {
+  resetState
+} from './reset-state';
 
 export {
   fetchCarBrands,
@@ -35,5 +38,6 @@ export {
   getCropImage,
   insertFormData,
   modelsSelected,
-  clearModels
+  clearModels,
+  resetState
 };
