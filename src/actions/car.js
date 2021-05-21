@@ -42,14 +42,15 @@ const carModelsError = (error) => {
   }
 };
 
-const brandSelected = (brandOptions, selectedBrand, models, filteredModels) => {
+const brandSelected = (brandOptions, selectedBrand, models, filteredModels, selectedModels) => {
   return {
     type: 'BRAND_SELECTED',
     payload: {
       brandOptions,
       selectedBrand,
       models,
-      filteredModels
+      filteredModels,
+      selectedModels
     }
   };
 };
@@ -58,6 +59,12 @@ const modelsSelected = (selectedModels) => {
   return {
     type: 'MODELS_SELECTED',
     payload: selectedModels
+  };
+};
+
+const clearModels = () => {
+  return {
+    type: 'MODELS_CLEAR'
   };
 };
 
@@ -93,5 +100,6 @@ export {
   fetchCarBrands,
   fetchCarModels,
   brandSelected,
-  modelsSelected
+  modelsSelected,
+  clearModels
 };

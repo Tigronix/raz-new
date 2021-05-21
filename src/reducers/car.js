@@ -18,7 +18,7 @@ const brandSelected = (state, action) => {
     selectedBrand: action.selectedBrand,
     models: action.models,
     filteredModels: filteredModels,
-    selectedModels: state.car.selectedModels,
+    selectedModels: action.selectedModels,
     loading: false,
     error: null
   }
@@ -114,6 +114,16 @@ const updateCar = (state, action) => {
         models: state.car.models,
         filteredModels: state.car.filteredModels,
         selectedModels: action.payload,
+        loading: null,
+        error: null
+      }
+    case 'MODELS_CLEAR':
+      return {
+        brandOptions: state.car.brandOptions,
+        selectedBrand: state.car.selectedBrand,
+        models: state.car.models,
+        filteredModels: [],
+        selectedModels: [],
         loading: null,
         error: null
       }

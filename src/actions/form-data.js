@@ -1,3 +1,5 @@
+
+
 // submit form data
 const submitRequested = () => {
   return {
@@ -5,10 +7,10 @@ const submitRequested = () => {
   };
 };
 
-const submitLoaded = (crop) => {
+const submitLoaded = (formData) => {
   return {
     type: 'SUBMIT_FORM_SUCCESS',
-    payload: crop
+    payload: formData
   };
 };
 
@@ -23,7 +25,9 @@ const insertFormData = (razbiratorService, dispatch, formData) => {
   dispatch(submitRequested());
   razbiratorService.submitForm(formData)
     .then((data) => {
-      dispatch(submitLoaded(data))
+      console.log('**********************', data);
+      dispatch(submitLoaded(data));
+      // dispatch(push('/'));
     })
     .catch((err) => {
       dispatch(submitError(err))

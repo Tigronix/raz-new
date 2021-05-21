@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import FilesLoader from '../file-loader';
 import Dnd from '../dnd';
+import { Redirect } from 'react-router-dom';
 
 import { withRazbiratorService } from '../hoc';
 import {
@@ -28,14 +29,13 @@ const FormAddProduct = ({
   models,
   onBrandSelected,
   filteredModels,
-  filesLoading,
-  crop,
   cropFile,
   onSubmit,
   selectedBrand,
   realFiles,
   onModelsSelected,
-  selectedModels
+  selectedModels,
+  formData
 }) => {
 
   const renderCrop = () => {
@@ -46,10 +46,23 @@ const FormAddProduct = ({
     return <Crop></Crop>
   };
 
+  const renderRedirect = () => {
+    const isSubmitSuccess = formData === 'ok';
+
+    if(isSubmitSuccess){
+      return (
+        <h1>WOW!</h1>
+      )
+    }
+
+    return (
+      <h1>BAD!</h1>
+    )
+  };
 
   return (
     <form className="form-add-product" onSubmit={(e) => onSubmit(e, selectedBrand, selectedModels, realFiles)}>
-      <h1>{filesLoading}</h1>
+      {renderRedirect()}
       <h2>Добавление товара</h2>
       <div className="row">
         <div className="col">
@@ -59,7 +72,7 @@ const FormAddProduct = ({
               <Select
                 placeholder="Марки"
                 options={brandOptions}
-                onChange={(selectedBrand) => onBrandSelected(brandOptions, selectedBrand, models, filteredModels)}
+                onChange={(selectedBrand) => onBrandSelected(brandOptions, selectedBrand, models, filteredModels, selectedModels)}
                 closeMenuOnSelect={false}
                 isMulti
                 isSearchable
@@ -75,6 +88,7 @@ const FormAddProduct = ({
                 placeholder="Модели"
                 options={filteredModels}
                 onChange={(selectedModels) => onModelsSelected(selectedModels)}
+                value={selectedModels}
                 closeMenuOnSelect={false}
                 isMulti
                 isSearchable
@@ -91,6 +105,7 @@ const FormAddProduct = ({
             <h4>ОЕМ</h4>
             <input required name="oem" className="form-control" type="text" placeholder="ОЕМ" />
           </div>
+          <button className="btn btn-primary">Добавить товар</button>
         </div>
         <div className="col">
           <FilesLoader></FilesLoader>
@@ -98,8 +113,9 @@ const FormAddProduct = ({
           {renderCrop()}
         </div>
       </div>
-      <button className="btn btn-primary">Добавить товар</button>
+      {/* <Redirect to="/" push /> */}
     </form>
+
   )
 };
 
@@ -120,13 +136,13 @@ class FormAddProductContainer extends Component {
       filteredModels,
       onFilesChange,
       files,
-      filesLoading,
       crop,
       cropFile,
       onSubmit,
       realFiles,
       onModelsSelected,
-      selectedModels
+      selectedModels,
+      formData
     } = this.props;
 
     if (loading) {
@@ -146,13 +162,13 @@ class FormAddProductContainer extends Component {
       filteredModels={filteredModels}
       onFilesChange={onFilesChange}
       files={files}
-      filesLoading={filesLoading}
       crop={crop}
       cropFile={cropFile}
       onSubmit={onSubmit}
       realFiles={realFiles}
       onModelsSelected={onModelsSelected}
       selectedModels={selectedModels}
+      formData={formData}
     ></FormAddProduct>
   }
 }
@@ -161,7 +177,8 @@ const mapStateToProps = (
   {
     car: { brandOptions, loading, error, selectedBrand, models, filteredModels, selectedModels },
     files: { files, realFiles },
-    crop: { crop, cropFile }
+    crop: { crop, cropFile },
+    formData: { formData }
   }
 ) => {
   return {
@@ -175,7 +192,8 @@ const mapStateToProps = (
     realFiles,
     crop,
     cropFile,
-    selectedModels
+    selectedModels,
+    formData
   };
 };
 
@@ -183,8 +201,30 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
   return {
     fetchCarBrands: fetchCarBrands(razbiratorService, dispatch),
     fetchCarModels: fetchCarModels(razbiratorService, dispatch),
-    onBrandSelected: (brandOptions, selectedBrand, models, filteredModels) => {
-      return dispatch(brandSelected(brandOptions, selectedBrand, models, filteredModels));
+    onBrandSelected: (brandOptions, selectedBrand, models, filteredModels, selectedModels) => {
+      let selectedBrandsIds = [];
+      let newFilteredModels = [];
+
+      selectedBrandsIds = [];
+      newFilteredModels = [];
+
+      selectedBrand.map((item) => selectedBrandsIds.push(item.value));
+
+      selectedModels.map((modelItem) => {
+        const modelId = modelItem.brandId;
+
+        return selectedBrandsIds.map((brandId) => {
+          const isMatch = modelId === brandId;
+
+          if (isMatch) {
+            newFilteredModels.push(modelItem);
+          }
+
+          return newFilteredModels;
+        });
+      });
+
+      return dispatch(brandSelected(brandOptions, selectedBrand, models, filteredModels, newFilteredModels));
     },
     onModelsSelected: (selectedModels) => {
       return dispatch(modelsSelected(selectedModels));

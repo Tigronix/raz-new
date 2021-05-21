@@ -32,6 +32,7 @@ const updateCrop = (state, action) => {
         loading: null,
         error: true
       };
+      
     // update crop
     case 'UPDATE_CROP_REQUEST':
       return {
