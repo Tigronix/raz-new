@@ -14,14 +14,12 @@ import './product-list.css';
 const ProductList = ({
   products
 }) => {
-  console.log('COMPONENT', products);
-
   return (
     <ul>
       {products.map((item) => {
         const { id, price, oem } = item;
 
-        return <li>
+        return <li key={id}>
           <h2>Id: {id}</h2>
           <div>Price: {price}</div>
           <div>OEM: {oem}</div>
@@ -33,7 +31,6 @@ const ProductList = ({
 
 class ProductListContainer extends Component {
   componentDidMount() {
-    console.log(this);
     this.props.fetchProducts();
   }
 
