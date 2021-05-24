@@ -125,14 +125,12 @@ class FormAddProductContainer extends Component {
       realFiles,
       onModelsSelected,
       selectedModels,
-      formData,
-      renderRedirect
+      formData
     } = this.props;
 
     const isSuccess = formData === 'ok';
 
     if (isSuccess) {
-      renderRedirect();
       return <Redirect to="/" push></Redirect>
     }
 
@@ -228,9 +226,6 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
       formData.realFiles = realFiles;
 
       insertFormData(razbiratorService, dispatch, formData);
-    },
-    renderRedirect: () => {
-      resetState(dispatch, '/');
     }
   };
 };
