@@ -1,14 +1,14 @@
 const updateResetState = (state, action) => {
   if(state === undefined) {
     return {
-      link: null
+      data: action.payload
     }
   }
 
   switch(action.type){
     case 'RESET_STATE':
       return {
-        link: action.payload
+        data: action.payload
       }
 
     default:

@@ -12,7 +12,7 @@ import {
   fetchCarModels,
   insertFormData,
   modelsSelected,
-  resetState
+  fetchProduct
 } from '../../actions';
 import {
   compose,
@@ -35,7 +35,9 @@ const FormAddProduct = ({
   selectedBrand,
   realFiles,
   onModelsSelected,
-  selectedModels
+  selectedModels,
+  data,
+  product
 }) => {
 
   const renderCrop = () => {
@@ -48,6 +50,7 @@ const FormAddProduct = ({
 
   return (
     <form className="form-add-product" onSubmit={(e) => onSubmit(e, selectedBrand, selectedModels, realFiles)}>
+      <h1>{data}</h1>
       <h2>Добавление товара</h2>
       <div className="row">
         <div className="col">
@@ -61,6 +64,7 @@ const FormAddProduct = ({
                 closeMenuOnSelect={false}
                 isMulti
                 isSearchable
+                // value={product.selected}
               />
               <input type="text" defaultValue={selectValidation(selectedBrand)} className="hidden-field__field" />
             </div>
@@ -83,11 +87,11 @@ const FormAddProduct = ({
           </div>
           <div className="form-group">
             <h4>Цена</h4>
-            <input name="price" className="form-control" type="text" placeholder="Цена" />
+            <input defaultValue={product.price} name="price" className="form-control" type="text" placeholder="Цена" />
           </div>
           <div className="form-group">
             <h4>ОЕМ</h4>
-            <input name="oem" className="form-control" type="text" placeholder="ОЕМ" />
+            <input defaultValue={product.oem} name="oem" className="form-control" type="text" placeholder="ОЕМ" />
           </div>
           <button className="btn btn-primary">Добавить товар</button>
         </div>
@@ -104,8 +108,14 @@ const FormAddProduct = ({
 
 class FormAddProductContainer extends Component {
   componentDidMount() {
-    this.props.fetchCarBrands();
-    this.props.fetchCarModels();
+    const { fetchCarBrands, fetchCarModels, fetchProduct, data } = this.props;
+
+    fetchCarBrands();
+    fetchCarModels();
+
+    if (data) {
+      fetchProduct(data);
+    }
   }
 
   render() {
@@ -125,7 +135,9 @@ class FormAddProductContainer extends Component {
       realFiles,
       onModelsSelected,
       selectedModels,
-      formData
+      formData,
+      data,
+      product
     } = this.props;
 
     const isSuccess = formData === 'ok';
@@ -157,6 +169,8 @@ class FormAddProductContainer extends Component {
       onModelsSelected={onModelsSelected}
       selectedModels={selectedModels}
       formData={formData}
+      data={data}
+      product={product}
     ></FormAddProduct>
   }
 }
@@ -166,7 +180,9 @@ const mapStateToProps = (
     car: { brandOptions, loading, error, selectedBrand, models, filteredModels, selectedModels },
     files: { files, realFiles },
     crop: { crop, cropFile },
-    formData: { formData}
+    formData: { formData },
+    redirect: { data },
+    product: { product }
   }
 ) => {
   return {
@@ -182,6 +198,8 @@ const mapStateToProps = (
     cropFile,
     selectedModels,
     formData,
+    data,
+    product
   };
 };
 
@@ -226,6 +244,9 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
       formData.realFiles = realFiles;
 
       insertFormData(razbiratorService, dispatch, formData);
+    },
+    fetchProduct: (id) => {
+      fetchProduct(razbiratorService, dispatch, id);
     }
   };
 };

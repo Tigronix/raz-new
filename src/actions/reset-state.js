@@ -1,12 +1,12 @@
-const resetSuccess = (page) => {
+const resetSuccess = (data) => {
   return {
     type: 'RESET_STATE',
-    action: page
+    payload: data
   }
 };
 
-const resetState = (dispatch, page) => {
-  dispatch(resetSuccess(page));
+const resetState = (dispatch, data) => {
+  dispatch(resetSuccess(data));
 };
 
 export {

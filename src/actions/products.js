@@ -1,6 +1,4 @@
-import {objToArr} from '../utils';
-
-// fetch files
+import { objToArr } from '../utils';
 const productsGetRequested = () => {
   return {
     type: 'GET_PRODUCTS_REQUEST'
@@ -34,5 +32,5 @@ const fetchProducts = (razbiratorService, dispatch) => {
 };
 
 export {
-  fetchProducts
+  fetchProducts,
 };

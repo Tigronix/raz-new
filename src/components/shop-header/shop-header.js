@@ -1,16 +1,68 @@
-import React from 'react';
-import './shop-header.css';
-import { Link } from 'react-router-dom';
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 
-const ShopHeader = () => {
+import { withRazbiratorService } from '../hoc';
+import {
+  resetState
+} from '../../actions';
+import { compose } from '../../utils';
+import { Redirect, Link, NavLink } from 'react-router-dom';
+
+
+import './shop-header.css';
+
+const ShopHeader = ({
+  renderRedirect
+}) => {
   return (
     <header className="shop-header row">
-      <Link to="/">Главная</Link>
-      <Link to="/add-product">
+      <NavLink activeClassName="active" className="btn btn-primary" onClick={() => renderRedirect()} to="/" exact>Главная</NavLink>
+      <NavLink activeClassName="active" className="btn btn-primary" onClick={() => renderRedirect()} to="/add-product" exact>
         Добавить товар
-      </Link>
+      </NavLink>
     </header>
   );
 };
 
-export default ShopHeader;
+class ShopHeaderContainer extends Component {
+  componentDidMount() {
+    
+  }
+
+  render() {
+    const {
+      data,
+      renderRedirect
+    } = this.props;
+
+    return <ShopHeader
+      data={data}
+      renderRedirect={renderRedirect}
+    ></ShopHeader>
+  }
+}
+
+const mapStateToProps = (
+  {
+    redirect: {
+      data
+    }
+  }
+) => {
+  return {
+    data
+  };
+};
+
+const mapDispatchToProps = (dispatch, { razbiratorService }) => {
+  return {
+    renderRedirect: (data) => {
+      resetState(dispatch, data);
+    }
+  };
+};
+
+export default compose(
+  withRazbiratorService(),
+  connect(mapStateToProps, mapDispatchToProps)
+)(ShopHeaderContainer);

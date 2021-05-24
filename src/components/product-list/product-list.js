@@ -1,31 +1,42 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import { withRazbiratorService } from '../hoc';
 import {
-  fetchProducts
+  fetchProducts,
+  resetState
 } from '../../actions';
 import { compose } from '../../utils';
+import { Redirect, Link } from 'react-router-dom';
 import Spinner from '../spinner/';
 import ErrorIndicator from '../error-indicator/';
 
 import './product-list.css';
 
 const ProductList = ({
-  products
+  products,
+  data,
+  renderRedirect
 }) => {
-  return (
-    <ul>
-      {products.map((item) => {
-        const { id, price, oem } = item;
 
-        return <li key={id}>
-          <h2>Id: {id}</h2>
-          <div>Price: {price}</div>
-          <div>OEM: {oem}</div>
-        </li>
-      })}
-    </ul>
+  return (
+    <Fragment>
+      <h1>{data}</h1>
+      <ul>
+        {products.map((item) => {
+          const { id, price, oem } = item;
+
+          return <li key={id}>
+            <h2>Id: {id}</h2>
+            <div>Price: {price}</div>
+            <div>OEM: {oem}</div>
+              <Link className="btn btn-primary" onClick={() => renderRedirect(id)} to="/add-product">
+                Добавить товар
+             </Link>
+          </li>
+        })}
+      </ul>
+    </Fragment>
   )
 };
 
@@ -38,7 +49,9 @@ class ProductListContainer extends Component {
     const {
       productsLoading,
       productsError,
-      products
+      products,
+      data,
+      renderRedirect
     } = this.props;
 
     if (productsLoading) {
@@ -51,6 +64,8 @@ class ProductListContainer extends Component {
 
     return <ProductList
       products={products}
+      data={data}
+      renderRedirect={renderRedirect}
     ></ProductList>
   }
 }
@@ -61,13 +76,17 @@ const mapStateToProps = (
       products,
       productsLoading,
       productsError,
+    },
+    redirect: {
+      data
     }
   }
 ) => {
   return {
     products,
     productsLoading,
-    productsError
+    productsError,
+    data
   };
 };
 
@@ -75,6 +94,9 @@ const mapDispatchToProps = (dispatch, { razbiratorService }) => {
   return {
     fetchProducts: () => {
       return fetchProducts(razbiratorService, dispatch)
+    },
+    renderRedirect: (data) => {
+      resetState(dispatch, data);
     }
   };
 };

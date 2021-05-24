@@ -26,6 +26,9 @@ import {
 import {
   fetchProducts
 } from './products';
+import {
+  fetchProduct
+} from './product';
 
 export {
   fetchCarBrands,
@@ -43,5 +46,6 @@ export {
   modelsSelected,
   clearModels,
   resetState,
-  fetchProducts
+  fetchProducts,
+  fetchProduct
 };
